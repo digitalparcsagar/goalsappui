@@ -201,6 +201,13 @@
     flex-shrink: 0;
   }
   .sb-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .sb-avatar-sm {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--teal);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; color: #fff;
+    flex-shrink: 0;
+  }
   .sb-user-name {
     font-size: 9px; font-weight: 500;
     color: rgba(255,255,255,0.35);
@@ -218,31 +225,68 @@
   .app-topbar {
     background: #fff;
     border-bottom: 1px solid var(--g200);
-    padding: 0 24px;
-    height: 52px;
+    padding: 0 16px;
+    height: 54px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    gap: 10px;
     position: sticky;
     top: 0;
     z-index: 10;
+    flex-shrink: 0;
   }
-  .topbar-title { font-size: 15px; font-weight: 700; color: var(--dark); }
-  .topbar-right { display: flex; align-items: center; gap: 8px; }
-  .topbar-icon {
-    width: 32px; height: 32px;
-    border-radius: 8px;
-    background: var(--g50);
-    border: 1px solid var(--g200);
+  .tb-left { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+  .tb-center { flex: 1; display: flex; justify-content: center; }
+  .tb-right { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+  .tb-btn {
+    display: flex; align-items: center; gap: 6px;
+    padding: 6px 12px; border-radius: 8px; border: none; cursor: pointer;
+    font-size: 12px; font-weight: 600; font-family: var(--font);
+    white-space: nowrap;
+  }
+  .btn-teal { background: var(--teal); color: #fff; }
+  .btn-dark { background: var(--dark); color: #fff; }
+  .btn-ghost { background: var(--g50); color: var(--g600); border: 1px solid var(--g200); }
+  .tb-search {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--g50); border: 1px solid var(--g200);
+    border-radius: 8px; padding: 0 12px; height: 34px;
+    width: 280px;
+  }
+  .tb-search input {
+    border: none; background: none; outline: none;
+    font-size: 13px; color: var(--dark); font-family: var(--font); width: 100%;
+  }
+  .tb-search input::placeholder { color: var(--g400); }
+  .search-kbd {
+    font-size: 10px; color: var(--g400); background: var(--g200);
+    border-radius: 4px; padding: 1px 5px; white-space: nowrap; flex-shrink: 0;
+  }
+  .ace-tb-btn {
+    display: flex; align-items: center; gap: 6px;
+    padding: 6px 12px; border-radius: 8px; border: 1px solid var(--teal);
+    background: var(--teal-light); color: var(--teal);
+    font-size: 12px; font-weight: 600; font-family: var(--font); cursor: pointer;
+  }
+  .tb-icon-btn {
+    width: 32px; height: 32px; border-radius: 8px;
     display: flex; align-items: center; justify-content: center;
-    cursor: pointer;
+    cursor: pointer; position: relative;
+    color: var(--g500);
   }
-  .topbar-avatar {
-    width: 32px; height: 32px;
-    border-radius: 50%;
-    overflow: hidden;
+  .tb-icon-btn:hover { background: var(--g100); }
+  .notif-dot {
+    position: absolute; top: 6px; right: 6px;
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #ef4444; border: 1.5px solid #fff;
   }
-  .topbar-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .tb-avatar {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: var(--teal); color: #fff;
+    font-size: 11px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; flex-shrink: 0;
+  }
   /* Dashboard content */
   .dash-content { padding: 20px 22px 24px; }
 
@@ -693,8 +737,7 @@
       <!-- Sidebar — OG narrow icon style -->
       <div class="app-sidebar">
         <div class="sb-logo-area">
-          <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDEiIGhlaWdodD0iMjkiIHZpZXdCb3g9IjAgMCA0MSAyOSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTIzLjc0NjkgNS4xMzExQzIzLjk5NDggMy40NDA5IDIzLjk4ODggMi4wNTU2OCAyMy4zMjcgMi4wMzEzNEMyMS4yMTY1IDEuOTU3MDEgMTcuODk4MiA5LjczMTQgMTkuOTc0MSA5LjU0OTAxQzIyLjI2MTcgOS4zNDc0IDIzLjc0NjkgNS4xMzE1MiAyMy43NDY5IDUuMTMxNTJMMjMuNzM2OSA3LjYwMDM5QzIzLjczNjkgNy42MDAzOSAyMS45NTY4IDExLjI4MzYgMTguNzkzNyAxMS4yMjY4QzE0LjM2NjMgMTEuMTQ3NCAxNi45OTc3IDAuODQzMDM0IDIyLjY2MjQgMC40NjI4NzlDMjUuMjEwNyAwLjI5MjAyMyAyNS4xODYgMi40NTY3NyAyNC43MjY0IDQuMjczNEMyNC40NTg5IDUuMzMxODUgMjMuNjg0NCA1LjU1OTA5IDIzLjc0NjkgNS4xMzExWiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZD0iTTM4LjMwMDEgMTMuOTUyQzMzLjkzMjUgMTMuMzk2NyAyOC43NTU2IDEzLjM3OTYgMjQuMTE1MSAxMy41MDNDOS4wMzgzMiA3LjI2NTE4IDEzLjU3MzEgMC44MjUxOCAxNS4yOTc1IDAuMzYxODVDMjIuOTkgNS43ODMgMTQuMjg1NiAxMi44NTggMjEuNzM0NCAxNC4xMTYyQzIyLjM3NjggMTQuMjI0MiAyMy4xMDU3IDE0LjMyNzQgMjMuODcwMSAxNC40MTcxQzI0LjAzOTYgMTQuNDM3IDI0LjIwOTMgMTQuNDU2NCAyNC4zNzggMTQuNDc1QzI1LjM2NjYgMTQuNTgwNSAyNi4zNzIzIDE0LjY3MjMgMjcuMzk1IDE0Ljc1SDI3LjM5NzdDMzEuNDYzNiAxNS4wMDU1IDM3LjYyMTggMTUuNjM0MiA0MC45MDgxIDE2LjM3MTlDNDAuOTA4MSAxNi4zNzQ5IDQxLjQ1OTUgMTQuMzM3OCAzOC4zMDAxIDEzLjk1MlpNMTAuNDkxMSAyNi43MzE2QzQuMzcwMzYgMjguMTY5OCAxLjM0MzMxIDI1LjkxMTkgMS42Njc4MyAyMy4xNzQ4QzIuMjUyMDYgMTguMjQ1NiAxMC43ODU1IDE2LjA1MzEgMjAuODYwOCAxNS40NTM0QzE4LjkzNjkgMjAuNjMxNiAxNS45MjQgMjUuNDU2MSAxMC40OTExIDI2LjczMTZaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4=" alt="Goals.com logo">
-          <span class="sb-logo-tagline">Performance</span>
+          <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDEiIGhlaWdodD0iMjkiIHZpZXdCb3g9IjAgMCA0MSAyOSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4NCjxwYXRoIGQ9Ik0yMy43NDY5IDUuMTMxMUMyMy45OTQ4IDMuNDQwOSAyMy45ODg4IDIuMDU1NjggMjMuMzI3IDIuMDMxMzRDMjEuMjE2NSAxLjk1NzAxIDE3Ljg5ODIgOS43MzE0IDE5Ljk3NDEgOS41NDkwMUMyMi4yNjE3IDkuMzQ3NCAyMy43NDY5IDUuMTMxNTIgMjMuNzQ2OSA1LjEzMTUyTDIzLjczNjkgNy42MDAzOUMyMy43MzY5IDcuNjAwMzkgMjEuOTU2OCAxMS4yODM2IDE4Ljc5MzcgMTEuMjI2OEMxNC4zNjYzIDExLjE0NzQgMTYuOTk3NyAwLjg0MzAzNCAyMi42NjI0IDAuNDYyODc5QzI1LjIxMDcgMC4yOTIwMjMgMjUuMTg2IDIuNDU2NzcgMjQuNzI2NCA0LjI3MzRDMjQuNDU4OSA1LjMzMTg1IDIzLjY4NDQgNS41NTkwOSAyMy43NDY5IDUuMTMxMVoiIGZpbGw9IndoaXRlIi8+DQo8cGF0aCBkPSJNMzguMzAwMSAxMy45NTJDMzMuOTMyNSAxMy4zOTY3IDI4Ljc1NTYgMTMuMzc5NiAyNC4xMTUxIDEzLjUwM0MyNi4xNTE3IDcuMzA5NTEgMjYuODgzNCAxLjUwMDM5IDI4LjY1MDcgMS4wMzA1NEMyOC4yMjM5IDAuMzUxMzg1IDI2Ljc5NTMgLTAuMDY0MjIyIDI1LjYwNCAwLjY3NjAxMkMyNC4wNjI2IDEuNjMxOTUgMjMuNDU4OCA3LjU0MjcyIDIxLjQ5OTggMTMuNjA5QzEwLjQ2ODMgMTQuMjA3IDAuMTU2NTg1IDE3LjAyOTUgMC4wMDE4NTQ3MSAyMy40NjQ0Qy0wLjE0Njk0MiAyOS43MTQzIDguNjkwNDcgMzAuMjcwOSAxNC41NDc0IDI3LjEzMTRDMTguNDM4OSAyNS4wNDU3IDIxLjA1MzQgMjEuMzcwMSAyMi42NjkxIDE3LjMzNDFDMjIuOTM4IDE2LjY2MyAyMy4zMjI3IDE1LjY5ODEgMjMuMzIyNyAxNS42OTgxTDIyLjE0MjQgMTUuMzgxNkMyMi42MDQ4IDE1LjM0NzQgMjMuNDcwNiAxNS4zNDI3IDIzLjQ3MTEgMTUuMzM4OUMyNC40NTk3IDE1LjMxMDQgMjUuNDY1NCAxNS4yOTYyIDI2LjQ4ODEgMTUuMjk2MkgyNi40OTA4QzMwLjU1NjcgMTUuMzAxNyAzNi43MTQ5IDE1Ljc0NDIgNDAuMDAxMiAxNi4yNzE4QzQwLjAwMTIgMTYuMjc0OCA0MC41NTI2IDE0LjIzNzcgMzguMzAwMSAxMy45NTJaTTEwLjQ5MTEgMjYuNzMxNkM0LjM3MDM2IDI4LjE2OTggMS4zNDMzMSAyNS45MTE5IDEuNjY3ODMgMjMuMTc0OEMyLjI1MjA2IDE4LjI0NTYgMTAuNzg1NSAxNi4wNTMxIDIwLjg2MDggMTUuNDUzNEMxOC45MzY5IDIwLjYzMTYgMTUuOTI0IDI1LjQ1NjEgMTAuNDkxMSAyNi43MzE2WiIgZmlsbD0id2hpdGUiLz4NCjwvc3ZnPg0K" alt="Goals.com logo">
         </div>
         <div class="sb-nav">
           <div class="sb-item active">
@@ -711,20 +754,35 @@
           </div>
           <div class="sb-item">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-            <span class="sb-label">Contacts</span>
+            <span class="sb-label">Accounts</span>
           </div>
           <div class="sb-item">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
             <span class="sb-label">Team</span>
           </div>
           <div class="sb-divider"></div>
-          <div class="sb-item">
+          <div class="sb-item" style="position:relative">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
             <span class="sb-label">Highlights</span>
+            <span style="position:absolute;top:6px;right:6px;background:#1d9e75;color:#fff;font-size:8px;font-weight:700;padding:1px 4px;border-radius:8px;line-height:1.4">4</span>
+          </div>
+          <div class="sb-item" style="position:relative">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <span class="sb-label">Chat</span>
+            <span style="position:absolute;top:6px;right:6px;background:#ef4444;color:#fff;font-size:8px;font-weight:700;padding:1px 4px;border-radius:8px;line-height:1.4">2</span>
           </div>
           <div class="sb-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5" rx="1"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+            <span class="sb-label">Bonuses</span>
+          </div>
+          <div class="sb-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            <span class="sb-label">Contests</span>
+          </div>
+          <div class="sb-divider"></div>
+          <div class="sb-item">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-            <span class="sb-label">Commission</span>
+            <span class="sb-label">Commissions</span>
           </div>
           <div class="sb-divider"></div>
           <div class="sb-item">
@@ -735,16 +793,13 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
             <span class="sb-label">Forecast</span>
           </div>
-          <div class="sb-divider"></div>
           <div class="sb-item">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-            <span class="sb-label">Settings</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+            <span class="sb-label">Marketplace</span>
           </div>
-        </div>
-        <div class="sb-footer">
-          <div class="sb-user-btn">
-            <div class="sb-avatar"><img src="https://randomuser.me/api/portraits/women/65.jpg" alt="PM"></div>
-            <div class="sb-user-name">Patricia M.</div>
+          <div class="sb-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <span class="sb-label">Company</span>
           </div>
         </div>
       </div>
@@ -753,14 +808,39 @@
       <div class="app-main">
         <!-- Topbar -->
         <div class="app-topbar">
-          <div>
-            <div class="topbar-title">Dashboard</div>
+          <div class="tb-left">
+            <button class="tb-btn btn-teal">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Quick Add
+            </button>
+            <button class="tb-btn btn-dark">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="11"/></svg>
+              Targets
+            </button>
+            <button class="tb-btn btn-ghost">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+              Accounts
+            </button>
           </div>
-          <div class="topbar-right">
-            <div class="topbar-icon">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--g500)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <div class="tb-center">
+            <div class="tb-search">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--g400)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" placeholder="Search Goals.com..." readonly>
             </div>
-            <div class="topbar-avatar"><img src="https://randomuser.me/api/portraits/women/65.jpg" alt=""></div>
+          </div>
+          <div class="tb-right">
+            <button class="ace-tb-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L13.5 8.5L19 10L13.5 11.5L12 17L10.5 11.5L5 10L10.5 8.5L12 3Z"/></svg>
+              Ask Ace
+            </button>
+            <div class="tb-icon-btn">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </div>
+            <div class="tb-icon-btn">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+              <div class="notif-dot"></div>
+            </div>
+            <div class="tb-avatar" style="background:none;padding:0;overflow:hidden"><img src="https://randomuser.me/api/portraits/women/65.jpg" style="width:100%;height:100%;object-fit:cover"></div>
           </div>
         </div>
 
@@ -795,8 +875,10 @@
                     <stop offset="100%" stop-color="#1d9e75" stop-opacity="0"/>
                   </linearGradient>
                 </defs>
-                <path d="M0,52 C20,50 40,45 70,42 C100,39 130,35 160,30 C190,25 210,28 240,24 C270,20 300,22 330,19 C360,16 390,18 420,14 C450,10 480,13 510,10 C530,8 545,8 560,7 L560,60 L0,60 Z" fill="url(#sg)"/>
-                <path d="M0,52 C20,50 40,45 70,42 C100,39 130,35 160,30 C190,25 210,28 240,24 C270,20 300,22 330,19 C360,16 390,18 420,14 C450,10 480,13 510,10 C530,8 545,8 560,7" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M0,52 C20,50 40,46 70,43 C100,40 130,36 160,31 C190,26 220,29 250,25 C270,22 290,20 310,18 L310,60 L0,60 Z" fill="url(#sg)"/>
+                <path d="M0,52 C20,50 40,46 70,43 C100,40 130,36 160,31 C190,26 220,29 250,25 C270,22 290,20 310,18" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <line x1="310" y1="0" x2="310" y2="60" stroke="rgba(29,158,117,0.2)" stroke-width="1" stroke-dasharray="3,3"/>
+                <text x="312" y="10" font-size="7" fill="rgba(29,158,117,0.6)" font-family="sans-serif">June</text>
                 <line x1="0" y1="2" x2="560" y2="2" stroke="var(--g200)" stroke-width="1" stroke-dasharray="4,4"/>
               </svg>
             </div>
@@ -961,7 +1043,7 @@
           <!-- Scrollable content -->
           <div class="phone-content">
             <div class="m-topbar">
-              <div class="m-logo">Goals<span>.</span>com</div>
+              <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDEiIGhlaWdodD0iMjkiIHZpZXdCb3g9IjAgMCA0MSAyOSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4NCjxwYXRoIGQ9Ik0yMy43NDY5IDUuMTMxMUMyMy45OTQ4IDMuNDQwOSAyMy45ODg4IDIuMDU1NjggMjMuMzI3IDIuMDMxMzRDMjEuMjE2NSAxLjk1NzAxIDE3Ljg5ODIgOS43MzE0IDE5Ljk3NDEgOS41NDkwMUMyMi4yNjE3IDkuMzQ3NCAyMy43NDY5IDUuMTMxNTIgMjMuNzQ2OSA1LjEzMTUyTDIzLjczNjkgNy42MDAzOUMyMy43MzY5IDcuNjAwMzkgMjEuOTU2OCAxMS4yODM2IDE4Ljc5MzcgMTEuMjI2OEMxNC4zNjYzIDExLjE0NzQgMTYuOTk3NyAwLjg0MzAzNCAyMi42NjI0IDAuNDYyODc5QzI1LjIxMDcgMC4yOTIwMjMgMjUuMTg2IDIuNDU2NzcgMjQuNzI2NCA0LjI3MzRDMjQuNDU4OSA1LjMzMTg1IDIzLjY4NDQgNS41NTkwOSAyMy43NDY5IDUuMTMxMVoiIGZpbGw9IndoaXRlIi8+DQo8cGF0aCBkPSJNMzguMzAwMSAxMy45NTJDMzMuOTMyNSAxMy4zOTY3IDI4Ljc1NTYgMTMuMzc5NiAyNC4xMTUxIDEzLjUwM0MyNi4xNTE3IDcuMzA5NTEgMjYuODgzNCAxLjUwMDM5IDI4LjY1MDcgMS4wMzA1NEMyOC4yMjM5IDAuMzUxMzg1IDI2Ljc5NTMgLTAuMDY0MjIyIDI1LjYwNCAwLjY3NjAxMkMyNC4wNjI2IDEuNjMxOTUgMjMuNDU4OCA3LjU0MjcyIDIxLjQ5OTggMTMuNjA5QzEwLjQ2ODMgMTQuMjA3IDAuMTU2NTg1IDE3LjAyOTUgMC4wMDE4NTQ3MSAyMy40NjQ0Qy0wLjE0Njk0MiAyOS43MTQzIDguNjkwNDcgMzAuMjcwOSAxNC41NDc0IDI3LjEzMTRDMTguNDM4OSAyNS4wNDU3IDIxLjA1MzQgMjEuMzcwMSAyMi42NjkxIDE3LjMzNDFDMjIuOTM4IDE2LjY2MyAyMy4zMjI3IDE1LjY5ODEgMjMuMzIyNyAxNS42OTgxTDIyLjE0MjQgMTUuMzgxNkMyMi42MDQ4IDE1LjM0NzQgMjMuNDcwNiAxNS4zNDI3IDIzLjQ3MTEgMTUuMzM4OUMyNC40NTk3IDE1LjMxMDQgMjUuNDY1NCAxNS4yOTYyIDI2LjQ4ODEgMTUuMjk2MkgyNi40OTA4QzMwLjU1NjcgMTUuMzAxNyAzNi43MTQ5IDE1Ljc0NDIgNDAuMDAxMiAxNi4yNzE4QzQwLjAwMTIgMTYuMjc0OCA0MC41NTI2IDE0LjIzNzcgMzguMzAwMSAxMy45NTJaTTEwLjQ5MTEgMjYuNzMxNkM0LjM3MDM2IDI4LjE2OTggMS4zNDMzMSAyNS45MTE5IDEuNjY3ODMgMjMuMTc0OEMyLjI1MjA2IDE4LjI0NTYgMTAuNzg1NSAxNi4wNTMxIDIwLjg2MDggMTUuNDUzNEMxOC45MzY5IDIwLjYzMTYgMTUuOTI0IDI1LjQ1NjEgMTAuNDkxMSAyNi43MzE2WiIgZmlsbD0id2hpdGUiLz4NCjwvc3ZnPg0K" style="height:18px;width:auto;filter:brightness(0) saturate(100%) invert(12%) sepia(22%) saturate(800%) hue-rotate(195deg) brightness(50%)">
               <div class="m-avatar"><img src="https://randomuser.me/api/portraits/women/65.jpg" alt=""></div>
             </div>
             <!-- Chart — white card -->
