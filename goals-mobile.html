@@ -1,0 +1,1416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<style>
+/* ── DESKTOP PHONE FRAME ── */
+@media (min-width: 600px) {
+  body {
+    background: #0f1117 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 100vh !important;
+    overflow: auto !important;
+    padding: 40px 20px !important;
+  }
+  .phone-shell {
+    position: relative;
+    width: 393px;
+    height: 852px;
+    background: #1a1a1a;
+    border-radius: 54px;
+    box-shadow:
+      0 0 0 1.5px #3a3a3a,
+      0 0 0 3px #111,
+      0 40px 100px rgba(0,0,0,0.7),
+      0 0 80px rgba(29,158,117,0.08);
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+  /* Dynamic Island */
+  .phone-shell::before {
+    content: '';
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 34px;
+    background: #0a0a0a;
+    border-radius: 20px;
+    z-index: 9999;
+  }
+  /* Side buttons */
+  .phone-shell::after {
+    content: '';
+    position: absolute;
+    right: -3px;
+    top: 160px;
+    width: 3px;
+    height: 80px;
+    background: #2a2a2a;
+    border-radius: 0 2px 2px 0;
+    box-shadow: 0 100px 0 #2a2a2a;
+  }
+  /* Volume buttons */
+  .phone-volume {
+    position: absolute;
+    left: -3px;
+    top: 140px;
+    width: 3px;
+    border-radius: 2px 0 0 2px;
+    background: #2a2a2a;
+    height: 36px;
+    box-shadow: 0 46px 0 #2a2a2a, 0 90px 0 #2a2a2a;
+    z-index: 9999;
+  }
+  /* Screen area */
+  .phone-screen {
+    position: absolute;
+    inset: 0;
+    border-radius: 54px;
+    overflow: hidden;
+    background: #f4f6f9;
+  }
+  .app {
+    width: 393px !important;
+    height: 852px !important;
+    max-width: 393px !important;
+    border-radius: 0 !important;
+    overflow: hidden !important;
+  }
+  /* Status bar */
+  .status-bar {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 54px;
+    background: #1a2035;
+    z-index: 9998;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: 0 28px 8px;
+  }
+  .status-time {
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: -0.3px;
+  }
+  .status-icons {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .header {
+    padding-top: 54px !important;
+    height: calc(56px + 54px) !important;
+  }
+  /* Fade label under phone */
+  .phone-label {
+    position: absolute;
+    bottom: -28px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    color: rgba(255,255,255,0.2);
+    white-space: nowrap;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 0.5px;
+  }
+  /* Screen glare */
+  .phone-glare {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 50%;
+    background: linear-gradient(180deg, rgba(255,255,255,0.04) 0%, transparent 100%);
+    border-radius: 54px 54px 0 0;
+    pointer-events: none;
+    z-index: 9997;
+  }
+}
+@media (max-width: 599px) {
+  .phone-shell, .phone-screen, .phone-volume, .status-bar, .phone-label, .phone-glare { display: contents; }
+}
+</style>
+<title>Goals.com</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+:root {
+  --navy: #1a2035;
+  --navy2: #1e2640;
+  --teal: #1d9e75;
+  --teal2: #17896a;
+  --teal-bg: rgba(29,158,117,0.08);
+  --teal-border: rgba(29,158,117,0.2);
+  --white: #fff;
+  --off: #f4f6f9;
+  --g50: #f8fafc;
+  --g100: #f1f4f8;
+  --g200: #e4e9f0;
+  --g300: #cbd5e1;
+  --g400: #94a3b8;
+  --g500: #6b7280;
+  --g600: #64748b;
+  --g700: #374151;
+  --g800: #334155;
+  --dark: #1e293b;
+  --amber: #f59e0b;
+  --red: #ef4444;
+  --blue: #3b82f6;
+  --green: #22c55e;
+  --font: 'Inter', sans-serif;
+  --mono: 'DM Mono', monospace;
+  --bottom-nav-h: 72px;
+  --header-h: 56px;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+html, body {
+  height: 100%;
+  font-family: var(--font);
+  background: var(--off);
+  color: var(--dark);
+  overflow: hidden;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  max-width: 430px;
+  margin: 0 auto;
+  background: var(--off);
+  position: relative;
+  overflow: hidden;
+}
+
+/* ── HEADER ── */
+.header {
+  height: var(--header-h);
+  background: var(--navy);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 10;
+}
+.header-logo svg { display: block; }
+.header-right { display: flex; align-items: center; gap: 10px; }
+.header-icon-btn {
+  width: 38px; height: 38px;
+  border-radius: 10px;
+  border: none;
+  background: rgba(255,255,255,0.08);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; position: relative;
+}
+.header-icon-btn svg { stroke: rgba(255,255,255,0.75); }
+.notif-dot {
+  position: absolute; top: 7px; right: 7px;
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--red); border: 1.5px solid var(--navy);
+}
+.header-avatar {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: var(--teal);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; color: #fff;
+  cursor: pointer;
+  overflow: hidden;
+}
+.header-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+/* ── PAGE AREA ── */
+.page-area {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: calc(var(--bottom-nav-h) + var(--safe-bottom) + 8px);
+}
+.page-area::-webkit-scrollbar { display: none; }
+
+.page { display: none; }
+.page.active { display: block; animation: fadeIn 0.18s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ── BOTTOM NAV ── */
+.bottom-nav {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: calc(var(--bottom-nav-h) + var(--safe-bottom));
+  padding-bottom: var(--safe-bottom);
+  background: var(--white);
+  border-top: 1px solid var(--g200);
+  display: flex;
+  align-items: flex-start;
+  padding-top: 8px;
+  z-index: 100;
+}
+.nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  cursor: pointer;
+  padding: 4px 0;
+  border: none;
+  background: none;
+  font-family: var(--font);
+  position: relative;
+}
+.nav-item svg { stroke: var(--g400); transition: stroke 0.15s; }
+.nav-item.active svg { stroke: var(--teal); }
+.nav-label {
+  font-size: 10px; font-weight: 500;
+  color: var(--g400);
+  transition: color 0.15s;
+}
+.nav-item.active .nav-label { color: var(--teal); font-weight: 600; }
+.nav-badge {
+  position: absolute; top: 2px; right: calc(50% - 16px);
+  background: var(--red); color: #fff;
+  font-size: 9px; font-weight: 700;
+  padding: 1px 5px; border-radius: 10px;
+  min-width: 16px; text-align: center;
+}
+.nav-badge-teal { background: var(--teal); }
+
+/* ── SECTION HEADER ── */
+.section-header {
+  padding: 20px 16px 12px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.section-title { font-size: 18px; font-weight: 700; color: var(--dark); letter-spacing: -0.3px; }
+.section-sub { font-size: 12px; color: var(--g400); margin-top: 2px; }
+.section-link {
+  font-size: 12px; font-weight: 600; color: var(--teal);
+  border: none; background: none; cursor: pointer; font-family: var(--font);
+}
+
+/* ── CARDS ── */
+.card {
+  background: var(--white);
+  border-radius: 16px;
+  border: 1px solid var(--g200);
+  overflow: hidden;
+}
+.card-padded { padding: 16px; }
+
+/* ── HERO CHART CARD ── */
+.hero-card {
+  background: var(--navy);
+  border-radius: 20px;
+  padding: 20px;
+  margin: 0 16px 14px;
+  position: relative;
+  overflow: hidden;
+}
+.hero-card::before {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(29,158,117,0.2) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-label {
+  font-size: 11px; font-weight: 600;
+  color: rgba(255,255,255,0.5);
+  text-transform: uppercase; letter-spacing: 0.6px;
+  margin-bottom: 4px;
+}
+.hero-value {
+  font-size: 30px; font-weight: 700;
+  color: var(--teal); font-family: var(--mono);
+  letter-spacing: -0.5px; line-height: 1;
+  margin-bottom: 10px;
+}
+.hero-badges { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+.hero-badge {
+  font-size: 11px; font-weight: 600;
+  padding: 3px 10px; border-radius: 20px;
+}
+.badge-green { background: rgba(29,158,117,0.2); color: #4ade80; border: 1px solid rgba(29,158,117,0.4); }
+.badge-red { background: rgba(239,68,68,0.18); color: #f87171; border: 1px solid rgba(239,68,68,0.35); }
+.badge-amber { background: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.3); }
+.hero-progress-wrap { margin-bottom: 6px; }
+.hero-progress-track {
+  height: 6px; background: rgba(255,255,255,0.1);
+  border-radius: 6px; overflow: hidden;
+}
+.hero-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--teal), #4ade80);
+  border-radius: 6px;
+  transition: width 0.6s cubic-bezier(0.4,0,0.2,1);
+}
+.hero-progress-labels {
+  display: flex; justify-content: space-between;
+  margin-top: 5px;
+}
+.hero-progress-labels span { font-size: 10px; color: rgba(255,255,255,0.3); }
+.hero-pct {
+  position: absolute; top: 20px; right: 20px;
+  text-align: right;
+}
+.hero-pct-val { font-size: 36px; font-weight: 700; color: #fff; font-family: var(--mono); line-height: 1; }
+.hero-pct-label { font-size: 10px; color: rgba(255,255,255,0.35); margin-top: 2px; }
+
+/* ── CHART SVG ── */
+.chart-wrap {
+  height: 70px; margin: 0 16px 14px;
+  background: var(--navy);
+  border-radius: 16px;
+  padding: 12px 16px 8px;
+  overflow: hidden;
+}
+.chart-wrap svg { width: 100%; height: 100%; }
+.chart-months {
+  display: flex; justify-content: space-between;
+  padding: 0 4px; margin-top: 4px;
+}
+.chart-months span { font-size: 9px; color: rgba(255,255,255,0.35); }
+
+/* ── PERIOD FILTER ── */
+.period-filter {
+  display: flex; gap: 6px;
+  padding: 0 16px 14px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.period-filter::-webkit-scrollbar { display: none; }
+.period-chip {
+  flex-shrink: 0;
+  padding: 5px 12px; border-radius: 20px;
+  border: 1.5px solid var(--g200); background: var(--white);
+  font-size: 12px; font-weight: 500; color: var(--g600);
+  cursor: pointer; font-family: var(--font);
+  transition: all 0.15s;
+}
+.period-chip.active {
+  background: var(--teal); border-color: var(--teal); color: #fff;
+}
+
+/* ── KPI GRID ── */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 0 16px 14px;
+}
+.kpi-card {
+  background: var(--white);
+  border: 1px solid var(--g200);
+  border-radius: 14px;
+  padding: 14px;
+  cursor: pointer;
+  transition: all 0.15s;
+  active: all 0.15s;
+}
+.kpi-card:active { transform: scale(0.97); }
+.kpi-label {
+  font-size: 10px; font-weight: 700;
+  color: var(--g400);
+  text-transform: uppercase; letter-spacing: 0.6px;
+  margin-bottom: 5px;
+}
+.kpi-value {
+  font-size: 20px; font-weight: 700;
+  color: var(--dark); font-family: var(--mono);
+  letter-spacing: -0.4px;
+}
+.kpi-value.teal { color: var(--teal); }
+.kpi-delta { font-size: 11px; margin-top: 3px; }
+.kpi-delta.up { color: var(--teal); }
+.kpi-delta.flat { color: var(--amber); }
+.kpi-delta.down { color: var(--red); }
+
+/* ── ROI CARD ── */
+.roi-card {
+  background: var(--white);
+  border: 1px solid var(--g200);
+  border-radius: 16px;
+  padding: 16px;
+  margin: 0 16px 14px;
+}
+.mini-bars {
+  display: flex; align-items: flex-end;
+  gap: 3px; height: 28px; margin-top: 8px;
+}
+.mini-bar { flex: 1; border-radius: 2px 2px 0 0; background: rgba(29,158,117,0.2); }
+.mini-bar.hi { background: var(--teal); }
+
+/* ── LEADERBOARD ── */
+.lb-card {
+  background: var(--white);
+  border: 1px solid var(--g200);
+  border-radius: 16px;
+  margin: 0 16px 14px;
+  overflow: hidden;
+}
+.lb-header {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--g100);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.lb-title { font-size: 14px; font-weight: 700; color: var(--dark); }
+.lb-row {
+  display: flex; align-items: center;
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--g100);
+  cursor: pointer;
+  transition: background 0.1s;
+  gap: 10px;
+}
+.lb-row:last-child { border-bottom: none; }
+.lb-row:active { background: var(--g50); }
+.lb-rank {
+  width: 22px; height: 22px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 800; flex-shrink: 0;
+}
+.rank-gold { background: linear-gradient(135deg,#f59e0b,#fbbf24); color: #fff; }
+.rank-silver { background: linear-gradient(135deg,#94a3b8,#cbd5e1); color: #fff; }
+.rank-bronze { background: linear-gradient(135deg,#b45309,#d97706); color: #fff; }
+.rank-other { background: var(--g200); color: var(--g600); }
+.lb-avatar {
+  width: 34px; height: 34px; border-radius: 50%;
+  object-fit: cover; flex-shrink: 0;
+  border: 2px solid var(--g200);
+}
+.lb-info { flex: 1; min-width: 0; }
+.lb-name { font-size: 13px; font-weight: 600; color: var(--dark); }
+.lb-role { font-size: 11px; color: var(--g400); }
+.lb-prog-wrap { margin-top: 4px; height: 3px; background: var(--g100); border-radius: 2px; overflow: hidden; }
+.lb-prog-fill { height: 100%; background: var(--teal); border-radius: 2px; }
+.lb-ytd { font-size: 12px; font-weight: 700; color: var(--teal); font-family: var(--mono); white-space: nowrap; }
+
+/* ── SECTION DIVIDER ── */
+.section-pad { padding: 0 16px 14px; }
+.section-card-title {
+  font-size: 13px; font-weight: 700; color: var(--dark);
+  padding: 14px 16px 10px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid var(--g100);
+}
+
+/* ── TOP PERFORMERS ── */
+.perf-card {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--g100);
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.perf-card:active { background: var(--g50); }
+.perf-card:last-child { border-bottom: none; }
+.perf-avatar {
+  width: 38px; height: 38px; border-radius: 50%;
+  object-fit: cover; flex-shrink: 0;
+}
+.perf-info { flex: 1; min-width: 0; }
+.perf-name { font-size: 13px; font-weight: 600; color: var(--dark); }
+.perf-role { font-size: 11px; color: var(--g400); }
+.perf-bar-wrap { height: 3px; background: var(--g100); border-radius: 2px; margin-top: 5px; overflow: hidden; }
+.perf-bar { height: 100%; background: var(--teal); border-radius: 2px; }
+.perf-ytd { font-size: 12px; font-weight: 700; color: var(--dark); font-family: var(--mono); }
+
+/* ── TOAST ── */
+.toast {
+  position: fixed;
+  bottom: calc(var(--bottom-nav-h) + var(--safe-bottom) + 12px);
+  left: 50%; transform: translateX(-50%) translateY(20px);
+  background: var(--dark);
+  color: #fff;
+  font-size: 13px; font-weight: 500;
+  padding: 10px 18px; border-radius: 20px;
+  white-space: nowrap;
+  opacity: 0;
+  transition: all 0.25s;
+  z-index: 9999;
+  pointer-events: none;
+  max-width: 300px; text-align: center;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ── ROLE TOGGLE ── */
+.role-toggle-wrap {
+  display: flex; align-items: center; gap: 8px;
+  padding: 0 16px 14px;
+}
+.role-toggle {
+  display: flex;
+  background: var(--g100);
+  border-radius: 10px;
+  padding: 3px;
+  gap: 2px;
+}
+.role-btn {
+  padding: 6px 14px; border-radius: 8px;
+  font-size: 12px; font-weight: 600;
+  border: none; background: none;
+  cursor: pointer; font-family: var(--font);
+  color: var(--g500);
+  transition: all 0.15s;
+}
+.role-btn.active {
+  background: var(--white);
+  color: var(--dark);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+/* ── ACE BUTTON ── */
+.ace-fab {
+  position: fixed;
+  bottom: calc(var(--bottom-nav-h) + var(--safe-bottom) + 16px);
+  right: 16px;
+  background: linear-gradient(135deg, #22c55e 0%, #1d9e75 50%, #0d9e8a 100%);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 10px 16px;
+  font-size: 13px; font-weight: 700;
+  display: flex; align-items: center; gap: 6px;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(29,158,117,0.45);
+  z-index: 50;
+  font-family: var(--font);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.ace-fab:active { transform: scale(0.95); box-shadow: 0 2px 10px rgba(29,158,117,0.3); }
+
+/* ── SHEET (bottom sheet modal) ── */
+.sheet-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 200;
+  display: none;
+  backdrop-filter: blur(2px);
+}
+.sheet-overlay.open { display: block; }
+.sheet {
+  position: fixed;
+  bottom: 0; left: 50%; transform: translateX(-50%) translateY(100%);
+  width: 100%; max-width: 430px;
+  background: var(--white);
+  border-radius: 24px 24px 0 0;
+  padding-bottom: var(--safe-bottom);
+  z-index: 201;
+  transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+  max-height: 85vh;
+  overflow-y: auto;
+}
+.sheet.open { transform: translateX(-50%) translateY(0); }
+.sheet-handle {
+  width: 36px; height: 4px; border-radius: 2px;
+  background: var(--g300);
+  margin: 10px auto 16px;
+}
+.sheet-title {
+  font-size: 16px; font-weight: 700; color: var(--dark);
+  padding: 0 20px 14px;
+  border-bottom: 1px solid var(--g100);
+}
+
+/* ── ACE PAGE ── */
+#page-ace {
+  display: none;
+  flex-direction: column;
+  height: 100%;
+}
+#page-ace.active {
+  display: flex;
+}
+.ace-messages {
+  flex: 1;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  overflow-y: auto;
+}
+.ace-msg-row { display: flex; gap: 8px; align-items: flex-end; }
+.ace-msg-row.user { flex-direction: row-reverse; }
+.ace-av {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--navy); display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; font-size: 10px;
+}
+.ace-bubble {
+  max-width: 78%; padding: 10px 14px;
+  border-radius: 14px; font-size: 13px; line-height: 1.55;
+}
+.ace-bubble.ai {
+  background: var(--white); border: 1px solid var(--g200);
+  color: var(--dark); border-radius: 14px 14px 14px 4px;
+}
+.ace-bubble.user {
+  background: var(--navy); color: rgba(255,255,255,0.9);
+  border-radius: 14px 14px 4px 14px;
+}
+.ace-input-wrap {
+  padding: 12px 16px;
+  border-top: 1px solid var(--g200);
+  background: var(--white);
+  display: flex; gap: 8px;
+}
+.ace-input {
+  flex: 1; border: 1.5px solid var(--g200);
+  border-radius: 12px; padding: 10px 14px;
+  font-size: 13px; font-family: var(--font);
+  outline: none; color: var(--dark);
+}
+.ace-input:focus { border-color: var(--teal); }
+.ace-send {
+  background: var(--teal); color: #fff;
+  border: none; border-radius: 12px;
+  padding: 10px 16px; font-size: 13px;
+  font-weight: 600; cursor: pointer;
+  font-family: var(--font);
+}
+.ace-suggest-wrap {
+  display: flex; gap: 6px; padding: 0 16px 10px;
+  overflow-x: auto;
+}
+.ace-suggest-wrap::-webkit-scrollbar { display: none; }
+.ace-chip {
+  flex-shrink: 0;
+  background: var(--g50); border: 1px solid var(--g200);
+  border-radius: 20px; padding: 6px 12px;
+  font-size: 11px; color: var(--g600);
+  cursor: pointer; font-family: var(--font);
+  white-space: nowrap;
+  transition: all 0.15s;
+}
+.ace-chip:active { background: var(--teal-bg); border-color: var(--teal); color: var(--teal); }
+
+/* ── SR DASHBOARD ── */
+.sr-activity-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 10px; padding: 0 16px 14px;
+}
+.activity-box {
+  background: var(--white);
+  border: 1px solid var(--g200);
+  border-radius: 14px;
+  padding: 14px;
+  text-align: center;
+}
+.activity-box.teal-bg { background: var(--teal-bg); border-color: var(--teal-border); }
+.activity-num { font-size: 28px; font-weight: 700; font-family: var(--mono); }
+.activity-label { font-size: 11px; color: var(--g500); margin-top: 2px; }
+.activity-goal { font-size: 10px; color: var(--g400); }
+
+/* ── STATUS PILL ── */
+.pill {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 10.5px; font-weight: 600;
+  padding: 2px 8px; border-radius: 20px;
+}
+.pill-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+.pill-green { background: #e6f7ef; color: #0f6f3a; }
+.pill-amber { background: #fef5e7; color: #8a4f00; }
+.pill-red { background: #fde8e8; color: #9b1c1c; }
+</style>
+</head>
+<body>
+<div class="phone-shell">
+  <div class="phone-volume"></div>
+  <div class="phone-glare"></div>
+  <div class="phone-screen">
+    <!-- Status Bar (desktop only) -->
+    <div class="status-bar">
+      <span class="status-time">9:41</span>
+      <div class="status-icons">
+        <!-- Signal -->
+        <svg width="16" height="12" viewBox="0 0 16 12" fill="none">
+          <rect x="0" y="6" width="3" height="6" rx="0.5" fill="white" opacity="0.4"/>
+          <rect x="4.5" y="4" width="3" height="8" rx="0.5" fill="white" opacity="0.6"/>
+          <rect x="9" y="2" width="3" height="10" rx="0.5" fill="white" opacity="0.8"/>
+          <rect x="13.5" y="0" width="2.5" height="12" rx="0.5" fill="white"/>
+        </svg>
+        <!-- WiFi -->
+        <svg width="15" height="12" viewBox="0 0 15 12" fill="white">
+          <path d="M7.5 9.5a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" opacity="1"/>
+          <path d="M4.2 7.2a4.7 4.7 0 0 1 6.6 0" stroke="white" stroke-width="1.3" fill="none" stroke-linecap="round" opacity="0.7"/>
+          <path d="M1.5 4.5a8.5 8.5 0 0 1 12 0" stroke="white" stroke-width="1.3" fill="none" stroke-linecap="round" opacity="0.4"/>
+        </svg>
+        <!-- Battery -->
+        <svg width="25" height="12" viewBox="0 0 25 12" fill="none">
+          <rect x="0.5" y="0.5" width="21" height="11" rx="3.5" stroke="white" stroke-opacity="0.35"/>
+          <rect x="2" y="2" width="16" height="8" rx="2" fill="white"/>
+          <path d="M23 4v4a2 2 0 0 0 0-4z" fill="white" opacity="0.4"/>
+        </svg>
+      </div>
+    </div>
+
+<div class="app">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-logo">
+      <svg width="32" height="22" viewBox="0 0 41 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M23.7469 5.1311C23.9948 3.4409 23.9888 2.05568 23.327 2.03134C21.2165 1.95701 17.8982 9.7314 19.9741 9.54901C22.2617 9.3474 23.7469 5.13152 23.7469 5.13152L23.7369 7.60039C23.7369 7.60039 21.9568 11.2836 18.7937 11.2268C14.3663 11.1474 16.9977 0.843034 22.6624 0.462879C25.2107 0.292023 25.186 2.45677 24.7264 4.2734C24.4589 5.33185 23.6844 5.55909 23.7469 5.1311Z" fill="white"/>
+        <path d="M38.3001 13.952C33.9325 13.3967 28.7556 13.3796 24.1151 13.503C26.1517 7.30951 26.8834 1.50039 28.6507 1.03054C28.2239 0.351385 26.7953 -0.064222 25.604 0.676012C24.0626 1.63195 23.4588 7.54272 21.4998 13.609C10.4683 14.207 0.156585 17.0295 0.00185471 23.4644C-0.146942 29.7143 8.69047 30.2709 14.5474 27.1314C18.4389 25.0457 21.0534 21.3701 22.6691 17.3341C22.938 16.663 23.3227 15.6981 23.3227 15.6981L22.1424 15.3816C22.6048 15.3474 23.4706 15.3427 23.4711 15.3389C24.4597 15.3104 25.4654 15.2962 26.4881 15.2962H26.4908C30.5567 15.3017 36.7149 15.7442 40.0012 16.2718C40.0012 16.2748 40.5526 14.2377 38.3001 13.952ZM10.4911 26.7316C4.37036 28.1698 1.34331 25.9119 1.66783 23.1748C2.25206 18.2456 10.7855 16.0531 20.8608 15.4534C18.9369 20.6316 15.924 25.4561 10.4911 26.7316Z" fill="white"/>
+      </svg>
+    </div>
+    <div class="header-right">
+      <button class="header-icon-btn" onclick="showToast('Search coming soon')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+      <button class="header-icon-btn" onclick="showToast('2 new notifications')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <div class="notif-dot"></div>
+      </button>
+      <div class="header-avatar" onclick="showToast('Patricia Moore · Sales Manager')">
+        <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Patricia Moore">
+      </div>
+    </div>
+  </header>
+
+  <!-- PAGE AREA -->
+  <div class="page-area" id="page-area">
+
+    <!-- DASHBOARD -->
+    <div id="page-dashboard" class="page active">
+      <div class="section-header">
+        <div>
+          <div class="section-title" id="dash-title">Dashboard</div>
+          <div class="section-sub" id="dash-sub">Good morning, Sagar</div>
+        </div>
+      </div>
+
+      <!-- Role Toggle -->
+      <div class="role-toggle-wrap">
+        <div class="role-toggle">
+          <button class="role-btn active" id="role-sm" onclick="setRole('sm')">Sales Manager</button>
+          <button class="role-btn" id="role-sr" onclick="setRole('sr')">My View</button>
+        </div>
+      </div>
+
+      <!-- SM VIEW -->
+      <div id="sm-view">
+
+        <!-- Hero Annual Goal -->
+        <div class="hero-card" onclick="showPage('goals')">
+          <div class="hero-pct">
+            <div class="hero-pct-val">41%</div>
+            <div class="hero-pct-label">of Annual</div>
+          </div>
+          <div class="hero-label">Annual Sales Goal</div>
+          <div class="hero-value">$19,355,000</div>
+          <div class="hero-badges">
+            <span class="hero-badge badge-green">$7.95M Achieved</span>
+            <span class="hero-badge badge-red">$11.4M Remaining</span>
+            <span class="hero-badge badge-amber">⚠ At Risk</span>
+          </div>
+          <div class="hero-progress-wrap">
+            <div class="hero-progress-track">
+              <div class="hero-progress-fill" style="width:41%"></div>
+            </div>
+            <div class="hero-progress-labels">
+              <span>Jan 2026</span>
+              <span>H2 Starts July</span>
+              <span>Dec 2026</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sales chart -->
+        <div style="margin: 0 16px 4px; background: var(--navy); border-radius: 16px; padding: 14px 16px 8px;">
+          <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:6px;font-weight:600;">Total Sales YTD</div>
+          <div style="font-size:20px;font-weight:700;color:var(--teal);font-family:var(--mono);margin-bottom:8px;">$7,955,967</div>
+          <svg viewBox="0 0 360 60" preserveAspectRatio="none" style="width:100%;height:48px;display:block;">
+            <defs>
+              <linearGradient id="grad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#1d9e75" stop-opacity="0.35"/>
+                <stop offset="100%" stop-color="#1d9e75" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <path d="M0,55 C30,52 60,45 90,40 C120,35 150,38 180,32 C210,26 240,28 270,22 C300,18 330,20 360,24 L360,60 L0,60Z" fill="url(#grad)"/>
+            <path d="M0,55 C30,52 60,45 90,40 C120,35 150,38 180,32 C210,26 240,28 270,22 C300,18 330,20 360,24" fill="none" stroke="#1d9e75" stroke-width="2"/>
+          </svg>
+          <div style="display:flex;justify-content:space-between;margin-top:4px;">
+            <span style="font-size:9px;color:rgba(255,255,255,0.3)">Jan</span>
+            <span style="font-size:9px;color:rgba(255,255,255,0.3)">Mar</span>
+            <span style="font-size:9px;color:rgba(255,255,255,0.3)">May</span>
+            <span style="font-size:9px;color:rgba(255,255,255,0.3)">Jul</span>
+            <span style="font-size:9px;color:rgba(255,255,255,0.3)">Sep</span>
+            <span style="font-size:9px;color:rgba(255,255,255,0.3)">Nov</span>
+          </div>
+        </div>
+
+        <!-- Period filter -->
+        <div style="padding: 12px 0 0;">
+          <div class="period-filter">
+            <button class="period-chip" onclick="setPeriod('7d',this)">Last 7 Days</button>
+            <button class="period-chip active" onclick="setPeriod('30d',this)">This Month</button>
+            <button class="period-chip" onclick="setPeriod('90d',this)">Last 90 Days</button>
+            <button class="period-chip" onclick="setPeriod('ytd',this)">YTD</button>
+            <button class="period-chip" onclick="setPeriod('annual',this)">Annual</button>
+          </div>
+        </div>
+
+        <!-- KPI grid -->
+        <div class="kpi-grid">
+          <div class="kpi-card" onclick="showPage('pipeline')">
+            <div class="kpi-label">Leads</div>
+            <div class="kpi-value">142</div>
+            <div class="kpi-delta up">▲ 18 this week</div>
+          </div>
+          <div class="kpi-card" onclick="showPage('pipeline')">
+            <div class="kpi-label">Opportunities</div>
+            <div class="kpi-value">67</div>
+            <div class="kpi-delta up">▲ 9 this week</div>
+          </div>
+          <div class="kpi-card" onclick="showPage('pipeline')">
+            <div class="kpi-label">Proposals</div>
+            <div class="kpi-value">34</div>
+            <div class="kpi-delta flat">— same as last week</div>
+          </div>
+          <div class="kpi-card teal" onclick="showPage('reports')">
+            <div class="kpi-label">Closed / Won</div>
+            <div class="kpi-value teal">19</div>
+            <div class="kpi-delta up">▲ 3 this week</div>
+          </div>
+          <div class="kpi-card" onclick="showPage('reports')">
+            <div class="kpi-label">Avg Deal Size</div>
+            <div class="kpi-value">$82,900</div>
+            <div class="kpi-delta up">▲ $4.2K MoM</div>
+          </div>
+          <div class="kpi-card" onclick="showPage('reports')">
+            <div class="kpi-label">Win Rate</div>
+            <div class="kpi-value teal">58%</div>
+            <div class="kpi-delta up">▲ 6pp vs Q2 2025</div>
+          </div>
+        </div>
+
+        <!-- Team ROI -->
+        <div class="roi-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <div>
+              <div class="kpi-label">Team ROI</div>
+              <div style="font-size:34px;font-weight:700;color:var(--teal);font-family:var(--mono);line-height:1;">312%</div>
+              <div style="font-size:11px;color:var(--g400);margin-top:3px;">▲ 4pts vs last period</div>
+            </div>
+            <div style="display:flex;gap:10px;">
+              <div style="text-align:center;background:var(--teal-bg);border-radius:10px;padding:10px 14px;">
+                <div style="font-size:11px;color:var(--teal);font-weight:600;">On Track</div>
+                <div style="font-size:20px;font-weight:700;color:var(--teal);font-family:var(--mono);">4/6</div>
+              </div>
+              <div style="text-align:center;background:rgba(239,68,68,0.06);border-radius:10px;padding:10px 14px;">
+                <div style="font-size:11px;color:var(--red);font-weight:600;">At Risk</div>
+                <div style="font-size:20px;font-weight:700;color:var(--red);font-family:var(--mono);">2/6</div>
+              </div>
+            </div>
+          </div>
+          <div class="mini-bars">
+            <div class="mini-bar" style="height:35%"></div>
+            <div class="mini-bar hi" style="height:55%"></div>
+            <div class="mini-bar" style="height:45%"></div>
+            <div class="mini-bar hi" style="height:72%"></div>
+            <div class="mini-bar" style="height:60%"></div>
+            <div class="mini-bar hi" style="height:88%"></div>
+          </div>
+        </div>
+
+        <!-- Leaderboard -->
+        <div class="lb-card">
+          <div class="lb-header">
+            <div class="lb-title">Leaderboard</div>
+            <button class="section-link" onclick="showPage('team')">Full team →</button>
+          </div>
+          <div id="lb-list"></div>
+        </div>
+
+        <!-- Top Performers -->
+        <div class="lb-card" style="margin-top:14px;">
+          <div class="lb-header">
+            <div class="lb-title">Top Performers</div>
+            <button class="section-link" onclick="showPage('team')">All →</button>
+          </div>
+          <div class="perf-card" onclick="showToast('Aya Pedrad · Sr. Advisor')">
+            <img src="https://randomuser.me/api/portraits/women/44.jpg" class="perf-avatar" alt="Aya Pedrad">
+            <div class="perf-info">
+              <div class="perf-name">Aya Pedrad</div>
+              <div class="perf-role">Sr. Advisor</div>
+              <div class="perf-bar-wrap"><div class="perf-bar" style="width:82%"></div></div>
+            </div>
+            <div class="perf-ytd">$990K</div>
+          </div>
+          <div class="perf-card" onclick="showToast('Elena Vasquez · Advisor')">
+            <img src="https://randomuser.me/api/portraits/women/68.jpg" class="perf-avatar" alt="Elena Vasquez">
+            <div class="perf-info">
+              <div class="perf-name">Elena Vasquez</div>
+              <div class="perf-role">Advisor</div>
+              <div class="perf-bar-wrap"><div class="perf-bar" style="width:78%"></div></div>
+            </div>
+            <div class="perf-ytd">$973K</div>
+          </div>
+          <div class="perf-card" onclick="showToast('Marcus Bradley · Advisor')">
+            <img src="https://randomuser.me/api/portraits/men/32.jpg" class="perf-avatar" alt="Marcus Bradley">
+            <div class="perf-info">
+              <div class="perf-name">Marcus Bradley</div>
+              <div class="perf-role">Advisor</div>
+              <div class="perf-bar-wrap"><div class="perf-bar" style="width:76%"></div></div>
+            </div>
+            <div class="perf-ytd">$968K</div>
+          </div>
+        </div>
+
+        <div style="height:80px;"></div>
+      </div><!-- end sm-view -->
+
+      <!-- SR VIEW -->
+      <div id="sr-view" style="display:none;">
+
+        <!-- SR Hero Chart -->
+        <div class="hero-card">
+          <div class="hero-label">My Sales YTD</div>
+          <div class="hero-value">$967,500</div>
+          <div class="hero-badges">
+            <span class="hero-badge" style="background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.8);border:1px solid rgba(255,255,255,0.15);">Annual Goal: $2.1M</span>
+            <span class="hero-badge badge-amber">46% of Goal · At Risk</span>
+          </div>
+          <div class="hero-progress-wrap">
+            <div class="hero-progress-track">
+              <div class="hero-progress-fill" style="width:46%;background:linear-gradient(90deg,var(--amber),#fbbf24)"></div>
+            </div>
+            <div class="hero-progress-labels">
+              <span>Jan</span><span>H2 Starts July</span><span>Dec</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Today's Activity -->
+        <div style="padding: 0 16px; margin-bottom: 14px;">
+          <div style="font-size:13px;font-weight:700;color:var(--dark);margin-bottom:10px;">Today's Activity</div>
+          <div class="sr-activity-grid">
+            <div class="activity-box teal-bg">
+              <div class="activity-num" style="color:var(--teal)">1</div>
+              <div class="activity-label">Calls</div>
+              <div class="activity-goal">Goal: 40</div>
+            </div>
+            <div class="activity-box">
+              <div class="activity-num" style="color:var(--dark)">0</div>
+              <div class="activity-label">Emails</div>
+              <div class="activity-goal">Goal: 40</div>
+            </div>
+          </div>
+          <button onclick="showToast('Opening Today\'s Targets')" style="width:100%;margin-top:10px;padding:11px;background:var(--navy);color:#fff;border:none;border-radius:12px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font);">View Today's Targets →</button>
+        </div>
+
+        <!-- SR KPIs -->
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-label">Sales This Month</div>
+            <div class="kpi-value teal">$156,000</div>
+            <div style="margin-top:6px;height:4px;background:var(--g100);border-radius:2px;overflow:hidden;">
+              <div style="width:89%;height:100%;background:var(--teal);border-radius:2px;"></div>
+            </div>
+            <div style="font-size:10px;color:var(--g400);margin-top:3px;">89% of $175K goal</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Avg Deal Size</div>
+            <div class="kpi-value">$53,514</div>
+            <div class="kpi-delta up">▲ $2.1K MoM</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Commissions Month</div>
+            <div class="kpi-value teal">$10,485</div>
+            <div class="kpi-delta up">▲ 10% rate</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Commissions YTD</div>
+            <div class="kpi-value">$96,695</div>
+            <div class="kpi-delta up">▲ vs last year</div>
+          </div>
+        </div>
+
+        <!-- Active Bonus -->
+        <div class="roi-card">
+          <div style="font-size:11px;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Active Bonus</div>
+          <div style="font-size:15px;font-weight:700;color:var(--dark);">Jump into June Bonus</div>
+          <div style="font-size:11px;color:var(--g400);margin-bottom:8px;">Jun 1 – Jun 30, 2026</div>
+          <div style="font-size:28px;font-weight:700;color:var(--teal);font-family:var(--mono);margin-bottom:10px;">$10,000</div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--g400);margin-bottom:4px;">
+            <span>Progress</span><span style="font-weight:700;color:var(--dark);">$156K / $200K</span>
+          </div>
+          <div style="height:7px;background:var(--g100);border-radius:4px;overflow:hidden;margin-bottom:6px;">
+            <div style="width:78%;height:100%;background:var(--teal);border-radius:4px;"></div>
+          </div>
+          <div style="font-size:11px;color:var(--g400);">78% · 12 days remaining</div>
+        </div>
+
+        <div style="height:80px;"></div>
+      </div><!-- end sr-view -->
+    </div><!-- end page-dashboard -->
+
+    <!-- GOALS (placeholder) -->
+    <div id="page-goals" class="page">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Goals</div>
+          <div class="section-sub">Track progress toward annual targets</div>
+        </div>
+      </div>
+      <div style="padding:40px 16px;text-align:center;color:var(--g400);">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--g300)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:12px;"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+        <div style="font-size:15px;font-weight:600;color:var(--g600);margin-bottom:6px;">Goals Page</div>
+        <div style="font-size:13px;color:var(--g400);">Coming next — give me feedback on Dashboard first!</div>
+      </div>
+    </div>
+
+    <!-- PIPELINE (placeholder) -->
+    <div id="page-pipeline" class="page">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Pipeline</div>
+          <div class="section-sub">Manage your deals by stage</div>
+        </div>
+      </div>
+      <div style="padding:40px 16px;text-align:center;color:var(--g400);">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--g300)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:12px;"><rect x="3" y="3" width="5" height="18" rx="1"/><rect x="10" y="3" width="5" height="11" rx="1"/><rect x="17" y="3" width="4" height="7" rx="1"/></svg>
+        <div style="font-size:15px;font-weight:600;color:var(--g600);margin-bottom:6px;">Pipeline Page</div>
+        <div style="font-size:13px;color:var(--g400);">Coming next!</div>
+      </div>
+    </div>
+
+    <!-- ACCOUNTS (placeholder) -->
+    <div id="page-accounts" class="page">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Accounts</div>
+          <div class="section-sub">Contacts &amp; companies</div>
+        </div>
+      </div>
+      <div style="padding:40px 16px;text-align:center;color:var(--g400);">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--g300)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:12px;"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <div style="font-size:15px;font-weight:600;color:var(--g600);margin-bottom:6px;">Accounts Page</div>
+        <div style="font-size:13px;color:var(--g400);">Coming next!</div>
+      </div>
+    </div>
+
+    <!-- TEAM (placeholder) -->
+    <div id="page-team" class="page">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Team</div>
+          <div class="section-sub">Your advisors</div>
+        </div>
+      </div>
+      <div style="padding:40px 16px;text-align:center;color:var(--g400);">
+        <div style="font-size:15px;font-weight:600;color:var(--g600);margin-bottom:6px;">Team Page</div>
+        <div style="font-size:13px;color:var(--g400);">Coming next!</div>
+      </div>
+    </div>
+
+    <!-- ASK ACE -->
+    <div id="page-ace" class="page">
+      <div style="background:var(--navy);padding:16px;border-bottom:1px solid rgba(255,255,255,0.08);">
+        <div style="font-size:15px;font-weight:700;color:#fff;">Ask <span style="color:var(--teal)">Ace</span></div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:2px;">Your AI sales coach</div>
+      </div>
+      <div class="ace-suggest-wrap" style="padding:10px 16px 6px;">
+        <button class="ace-chip" onclick="acePrompt(this)">Who needs coaching?</button>
+        <button class="ace-chip" onclick="acePrompt(this)">Pipeline at risk?</button>
+        <button class="ace-chip" onclick="acePrompt(this)">Top deals to close</button>
+        <button class="ace-chip" onclick="acePrompt(this)">Team ROI breakdown</button>
+      </div>
+      <div class="ace-messages" id="ace-messages">
+        <div class="ace-msg-row">
+          <div class="ace-av">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L13.5 8.5L19 10L13.5 11.5L12 17L10.5 11.5L5 10L10.5 8.5L12 3Z"/></svg>
+          </div>
+          <div>
+            <div class="ace-bubble ai">Hey Sagar 👋 Your team is at <strong>41%</strong> of the annual goal. <strong>2 reps</strong> are at risk. Want a breakdown or coaching suggestions?</div>
+          </div>
+        </div>
+      </div>
+      <div class="ace-input-wrap">
+        <input class="ace-input" id="ace-input" type="text" placeholder="Ask Ace anything…" onkeydown="if(event.key==='Enter')sendAce()">
+        <button class="ace-send" onclick="sendAce()">Send</button>
+      </div>
+    </div>
+
+    <!-- MORE -->
+    <div id="page-more" class="page">
+      <div class="section-header">
+        <div class="section-title">More</div>
+      </div>
+      <div style="padding: 0 16px; display:flex;flex-direction:column;gap:10px;">
+        <div style="background:var(--white);border-radius:16px;border:1px solid var(--g200);overflow:hidden;">
+          <div onclick="showToast('Highlights')" style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--g100);cursor:pointer;">
+            <div style="width:36px;height:36px;background:#fef9c3;border-radius:10px;display:flex;align-items:center;justify-content:center;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+            <div style="flex:1"><div style="font-size:14px;font-weight:600;color:var(--dark);">Highlights</div><div style="font-size:11px;color:var(--g400);">4 new recognitions</div></div>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--g300)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+          <div onclick="showToast('Chat')" style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--g100);cursor:pointer;">
+            <div style="width:36px;height:36px;background:#dbeafe;border-radius:10px;display:flex;align-items:center;justify-content:center;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <div style="flex:1"><div style="font-size:14px;font-weight:600;color:var(--dark);">Chat</div><div style="font-size:11px;color:var(--g400);">2 unread messages</div></div>
+            <span style="background:var(--red);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;">2</span>
+          </div>
+          <div onclick="showPage('ace')" style="display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;">
+            <div style="width:36px;height:36px;background:var(--teal-bg);border-radius:10px;display:flex;align-items:center;justify-content:center;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L13.5 8.5L19 10L13.5 11.5L12 17L10.5 11.5L5 10L10.5 8.5L12 3Z"/></svg>
+            </div>
+            <div style="flex:1"><div style="font-size:14px;font-weight:600;color:var(--dark);">Ask Ace</div><div style="font-size:11px;color:var(--g400);">AI sales coach</div></div>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--g300)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+
+        <div style="background:var(--white);border-radius:16px;border:1px solid var(--g200);overflow:hidden;">
+          <div onclick="showToast('Bonuses')" style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--g100);cursor:pointer;">
+            <div style="width:36px;height:36px;background:#f0fdf4;border-radius:10px;display:flex;align-items:center;justify-content:center;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5" rx="1"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+            </div>
+            <div style="flex:1"><div style="font-size:14px;font-weight:600;color:var(--dark);">Bonuses</div><div style="font-size:11px;color:var(--g400);">Jump into June active</div></div>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--g300)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+          <div onclick="showToast('Contests')" style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--g100);cursor:pointer;">
+            <div style="width:36px;height:36px;background:#fef3c7;border-radius:10px;display:flex;align-items:center;justify-content:center;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            </div>
+            <div style="flex:1"><div style="font-size:14px;font-weight:600;color:var(--dark);">Contests</div><div style="font-size:11px;color:var(--g400);">1 active contest</div></div>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--g300)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+          <div onclick="showToast('Commissions')" style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--g100);cursor:pointer;">
+            <div style="width:36px;height:36px;background:var(--teal-bg);border-radius:10px;display:flex;align-items:center;justify-content:center;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+            <div style="flex:1"><div style="font-size:14px;font-weight:600;color:var(--dark);">Commissions</div><div style="font-size:11px;color:var(--g400);">$96,695 YTD</div></div>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--g300)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+          <div onclick="showToast('Reports')" style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--g100);cursor:pointer;">
+            <div style="width:36px;height:36px;background:#f0f0ff;border-radius:10px;display:flex;align-items:center;justify-content:center;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            </div>
+            <div style="flex:1"><div style="font-size:14px;font-weight:600;color:var(--dark);">Reports</div><div style="font-size:11px;color:var(--g400);">Sales analytics</div></div>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--g300)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+          <div onclick="showToast('Forecasting')" style="display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;">
+            <div style="width:36px;height:36px;background:#fff1f0;border-radius:10px;display:flex;align-items:center;justify-content:center;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+            </div>
+            <div style="flex:1"><div style="font-size:14px;font-weight:600;color:var(--dark);">Forecasting</div><div style="font-size:11px;color:var(--g400);">Q3 projections</div></div>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--g300)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+
+        <div style="background:var(--white);border-radius:16px;border:1px solid var(--g200);overflow:hidden;">
+          <div onclick="showToast('Settings')" style="display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;">
+            <div style="width:36px;height:36px;background:var(--g100);border-radius:10px;display:flex;align-items:center;justify-content:center;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--g600)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            </div>
+            <div style="flex:1"><div style="font-size:14px;font-weight:600;color:var(--dark);">Settings</div><div style="font-size:11px;color:var(--g400);">Account &amp; preferences</div></div>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--g300)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+
+        <div style="height:80px;"></div>
+      </div>
+    </div>
+
+    <!-- REPORTS (placeholder) -->
+    <div id="page-reports" class="page">
+      <div class="section-header">
+        <div class="section-title">Reports</div>
+      </div>
+      <div style="padding:40px 16px;text-align:center;color:var(--g400);">
+        <div style="font-size:15px;font-weight:600;color:var(--g600);margin-bottom:6px;">Reports</div>
+        <div style="font-size:13px;">Coming soon!</div>
+      </div>
+    </div>
+
+  </div><!-- end page-area -->
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" id="nav-dashboard" onclick="showPage('dashboard')">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+      <span class="nav-label">Dashboard</span>
+    </button>
+    <button class="nav-item" id="nav-goals" onclick="showPage('goals')">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+      <span class="nav-label">Goals</span>
+    </button>
+    <button class="nav-item" id="nav-pipeline" onclick="showPage('pipeline')">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="5" height="18" rx="1"/><rect x="10" y="3" width="5" height="11" rx="1"/><rect x="17" y="3" width="4" height="7" rx="1"/></svg>
+      <span class="nav-label">Pipeline</span>
+    </button>
+    <button class="nav-item" id="nav-accounts" onclick="showPage('accounts')">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <span class="nav-label">Accounts</span>
+    </button>
+    <button class="nav-item" id="nav-more" onclick="showPage('more')">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+      <span class="nav-label">More</span>
+      <span class="nav-badge nav-badge-teal">6</span>
+    </button>
+  </nav>
+
+  <!-- ASK ACE FAB (hidden when on ace page) -->
+  <button class="ace-fab" id="ace-fab" onclick="showPage('ace')">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L13.5 8.5L19 10L13.5 11.5L12 17L10.5 11.5L5 10L10.5 8.5L12 3Z"/><path d="M5 3L5.75 5.25L8 6L5.75 6.75L5 9L4.25 6.75L2 6L4.25 5.25L5 3Z"/></svg>
+    Ask Ace
+  </button>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+</div><!-- end app -->
+
+  </div><!-- end phone-screen -->
+  <div class="phone-label">iPhone 17 Pro Max · Goals.com</div>
+</div><!-- end phone-shell -->
+
+<script>
+// ── LEADERBOARD DATA ──
+const lbData = [
+  { name:'Aya Pedrad', role:'Sr. Advisor', ytd:'$990,086', pct:82, photo:'https://randomuser.me/api/portraits/women/44.jpg' },
+  { name:'Elena Vasquez', role:'Advisor', ytd:'$972,775', pct:80, photo:'https://randomuser.me/api/portraits/women/68.jpg' },
+  { name:'Marcus Bradley', role:'Advisor', ytd:'$967,500', pct:78, photo:'https://randomuser.me/api/portraits/men/32.jpg' },
+  { name:'Brock Wilson', role:'Sr. Advisor', ytd:'$953,412', pct:76, photo:'https://randomuser.me/api/portraits/men/54.jpg' },
+  { name:'Jules Richards', role:'Advisor', ytd:'$919,456', pct:73, photo:'https://randomuser.me/api/portraits/women/15.jpg' },
+];
+const rankClasses = ['rank-gold','rank-silver','rank-bronze','rank-other','rank-other'];
+
+function buildLeaderboard() {
+  const el = document.getElementById('lb-list');
+  el.innerHTML = lbData.map((r,i) => `
+    <div class="lb-row" onclick="showToast('${r.name} · ${r.ytd} YTD')">
+      <div class="lb-rank ${rankClasses[i]}">${i+1}</div>
+      <img src="${r.photo}" class="lb-avatar" alt="${r.name}">
+      <div class="lb-info">
+        <div class="lb-name">${r.name}</div>
+        <div class="lb-role">${r.role}</div>
+        <div class="lb-prog-wrap"><div class="lb-prog-fill" style="width:${r.pct}%"></div></div>
+      </div>
+      <div class="lb-ytd">${r.ytd}</div>
+    </div>
+  `).join('');
+}
+buildLeaderboard();
+
+// ── NAVIGATION ──
+let currentPage = 'dashboard';
+const navPages = ['dashboard','goals','pipeline','accounts','more'];
+
+function showPage(page) {
+  // hide all pages
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  // deactivate all nav items
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+  const pageEl = document.getElementById('page-' + page);
+  if (pageEl) pageEl.classList.add('active');
+
+  // activate nav item if it exists
+  const navEl = document.getElementById('nav-' + page);
+  if (navEl) navEl.classList.add('active');
+  else if (page === 'ace') document.getElementById('nav-more').classList.add('active');
+  else if (page === 'reports') document.getElementById('nav-more').classList.add('active');
+
+  // scroll to top
+  document.getElementById('page-area').scrollTo(0, 0);
+
+  // show/hide ace fab
+  document.getElementById('ace-fab').style.display = page === 'ace' ? 'none' : 'flex';
+
+  currentPage = page;
+}
+
+// ── ROLE TOGGLE ──
+function setRole(role) {
+  const isSM = role === 'sm';
+  document.getElementById('sm-view').style.display = isSM ? 'block' : 'none';
+  document.getElementById('sr-view').style.display = isSM ? 'none' : 'block';
+  document.getElementById('role-sm').classList.toggle('active', isSM);
+  document.getElementById('role-sr').classList.toggle('active', !isSM);
+  document.getElementById('dash-sub').textContent = isSM
+    ? 'Good morning, Sagar — team snapshot'
+    : 'Good morning, Brock — your personal view';
+}
+
+// ── PERIOD FILTER ──
+function setPeriod(period, btn) {
+  document.querySelectorAll('.period-chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  showToast('Showing ' + btn.textContent);
+}
+
+// ── TOAST ──
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// ── ASK ACE ──
+const aceResponses = [
+  "Based on current pace, <strong>Jules Richards</strong> is 49% behind annual target. A coaching session this week would help.",
+  "Your top 3 at-risk deals total <strong>$340K</strong> — all in Proposal stage for 30+ days.",
+  "<strong>Marcus Bradley</strong> leads in monthly sales at $156K. His win rate of 55% is solid.",
+  "Team ROI sits at <strong>312%</strong> — up 4pts vs. last period. <strong>Aya Pedrad</strong> leads at $990K YTD.",
+];
+let aceIdx = 0;
+
+function acePrompt(btn) {
+  const input = document.getElementById('ace-input');
+  input.value = btn.textContent;
+  sendAce();
+}
+
+function sendAce() {
+  const input = document.getElementById('ace-input');
+  const text = input.value.trim();
+  if (!text) return;
+  const msgs = document.getElementById('ace-messages');
+
+  // user bubble
+  msgs.innerHTML += `
+    <div class="ace-msg-row user">
+      <div class="ace-av" style="background:var(--teal)">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </div>
+      <div class="ace-bubble user">${text}</div>
+    </div>
+  `;
+  input.value = '';
+  msgs.scrollTop = msgs.scrollHeight;
+
+  // ace response
+  setTimeout(() => {
+    msgs.innerHTML += `
+      <div class="ace-msg-row">
+        <div class="ace-av">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L13.5 8.5L19 10L13.5 11.5L12 17L10.5 11.5L5 10L10.5 8.5L12 3Z"/></svg>
+        </div>
+        <div class="ace-bubble ai">${aceResponses[aceIdx % aceResponses.length]}</div>
+      </div>
+    `;
+    aceIdx++;
+    msgs.scrollTop = msgs.scrollHeight;
+  }, 700);
+}
+</script>
+</body>
+</html>
