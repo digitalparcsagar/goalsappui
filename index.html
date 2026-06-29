@@ -1057,48 +1057,527 @@ html, body {
       </div><!-- end sr-view -->
     </div><!-- end page-dashboard -->
 
-    <!-- GOALS (placeholder) -->
+    <!-- GOALS -->
     <div id="page-goals" class="page">
       <div class="section-header">
         <div>
           <div class="section-title">Goals</div>
-          <div class="section-sub">Track progress toward annual targets</div>
+          <div class="section-sub">2026 Annual Progress</div>
         </div>
+        <button onclick="showToast('Goal Setting coming soon')" style="display:flex;align-items:center;gap:5px;padding:7px 12px;background:var(--teal);color:#fff;border:none;border-radius:10px;font-size:12px;font-weight:700;font-family:var(--font);cursor:pointer;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+          Edit Goals
+        </button>
       </div>
-      <div style="padding:40px 16px;text-align:center;color:var(--g400);">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--g300)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:12px;"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
-        <div style="font-size:15px;font-weight:600;color:var(--g600);margin-bottom:6px;">Goals Page</div>
-        <div style="font-size:13px;color:var(--g400);">Coming next — give me feedback on Dashboard first!</div>
+      <div style="padding:0 16px;">
+
+        <!-- Hero: Annual Goal + Team ROI side by side -->
+        <div style="display:grid;grid-template-columns:1fr auto;gap:10px;margin-bottom:14px;">
+          <!-- Annual Goal card -->
+          <div style="background:var(--navy);border-radius:16px;padding:16px;position:relative;overflow:hidden;">
+            <div style="position:absolute;top:-30px;right:-30px;width:120px;height:120px;background:radial-gradient(circle,rgba(29,158,117,0.25) 0%,transparent 70%);pointer-events:none;"></div>
+            <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:4px;">Annual Sales Goal — 2026</div>
+            <div style="font-size:22px;font-weight:700;color:#fff;font-family:var(--mono);line-height:1;margin-bottom:8px;">$19.35M</div>
+            <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px;">
+              <span style="background:rgba(29,158,117,0.3);border:1px solid rgba(29,158,117,0.5);color:#4ade80;border-radius:6px;padding:2px 8px;font-size:10px;font-weight:700;">$7.95M Done</span>
+              <span style="background:rgba(245,158,11,0.25);border:1px solid rgba(245,158,11,0.4);color:#fbbf24;border-radius:6px;padding:2px 8px;font-size:10px;font-weight:700;">⚠ At Risk</span>
+            </div>
+            <div style="background:rgba(255,255,255,0.1);border-radius:6px;height:6px;overflow:hidden;margin-bottom:4px;">
+              <div style="width:41%;height:100%;background:linear-gradient(90deg,var(--teal),#34d399);border-radius:6px;"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;">
+              <span style="font-size:10px;color:rgba(255,255,255,0.4);">Jan</span>
+              <span style="font-size:11px;font-weight:700;color:var(--teal);font-family:var(--mono);">41%</span>
+              <span style="font-size:10px;color:rgba(255,255,255,0.4);">Dec</span>
+            </div>
+          </div>
+          <!-- Team ROI -->
+          <div style="background:var(--white);border:1px solid var(--g200);border-radius:16px;padding:14px 16px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:80px;">
+            <div style="font-size:9px;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;text-align:center;">Team ROI</div>
+            <div style="font-size:28px;font-weight:700;color:var(--teal);font-family:var(--mono);line-height:1;">285%</div>
+            <div style="font-size:9px;color:var(--g400);margin-top:2px;">YTD</div>
+            <div style="margin-top:8px;width:100%;display:flex;flex-direction:column;gap:4px;">
+              <div style="display:flex;justify-content:space-between;font-size:10px;"><span style="color:var(--teal);">● On Track</span><span style="font-weight:700;color:var(--teal);">4/6</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:10px;"><span style="color:var(--red);">● At Risk</span><span style="font-weight:700;color:var(--red);">2/6</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter chips -->
+        <div id="goals-filter-wrap" style="display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px;">
+          <button onclick="filterGoalCards('all',this)" class="goals-chip active-chip" style="padding:5px 14px;border-radius:20px;font-size:12px;font-weight:600;border:1.5px solid var(--teal);background:var(--teal);color:#fff;cursor:pointer;white-space:nowrap;font-family:var(--font);">All</button>
+          <button onclick="filterGoalCards('on-track',this)" class="goals-chip" style="padding:5px 14px;border-radius:20px;font-size:12px;font-weight:600;border:1.5px solid var(--g200);background:var(--white);color:var(--g600);cursor:pointer;white-space:nowrap;font-family:var(--font);">On Track</button>
+          <button onclick="filterGoalCards('at-risk',this)" class="goals-chip" style="padding:5px 14px;border-radius:20px;font-size:12px;font-weight:600;border:1.5px solid var(--g200);background:var(--white);color:var(--g600);cursor:pointer;white-space:nowrap;font-family:var(--font);">At Risk</button>
+          <button onclick="filterGoalCards('behind',this)" class="goals-chip" style="padding:5px 14px;border-radius:20px;font-size:12px;font-weight:600;border:1.5px solid var(--g200);background:var(--white);color:var(--g600);cursor:pointer;white-space:nowrap;font-family:var(--font);">Behind</button>
+        </div>
+
+        <!-- Advisor Goal Cards -->
+        <div id="goals-card-list" style="display:flex;flex-direction:column;gap:10px;">
+
+          <!-- Brock Wilson — On Track 82% -->
+          <div class="goal-card" data-status="on-track" style="background:var(--white);border:1px solid var(--g100);border-radius:14px;padding:14px;border-left:4px solid var(--teal);">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div style="position:relative;flex-shrink:0;">
+                <svg width="52" height="52" viewBox="0 0 52 52" style="transform:rotate(-90deg);">
+                  <circle cx="26" cy="26" r="21" fill="none" stroke="var(--g100)" stroke-width="5"/>
+                  <circle cx="26" cy="26" r="21" fill="none" stroke="var(--teal)" stroke-width="5" stroke-linecap="round" stroke-dasharray="131.9" stroke-dashoffset="23.7"/>
+                </svg>
+                <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+                  <img src="https://randomuser.me/api/portraits/men/54.jpg" style="width:34px;height:34px;border-radius:50%;object-fit:cover;">
+                </div>
+              </div>
+              <div style="flex:1;min-width:0;">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;">
+                  <div style="font-size:14px;font-weight:700;color:var(--dark);">Brock Wilson</div>
+                  <div style="display:flex;align-items:center;gap:6px;">
+                    <span style="font-size:13px;font-weight:700;color:var(--teal);font-family:var(--mono);">82%</span>
+                    <span style="background:rgba(29,158,117,0.12);color:var(--teal);border-radius:20px;padding:2px 8px;font-size:10px;font-weight:700;">On Track</span>
+                  </div>
+                </div>
+                <div style="font-size:11px;color:var(--g400);margin-bottom:6px;">Senior Financial Advisor</div>
+                <div style="font-size:11px;color:var(--g500);margin-bottom:4px;">$953K <span style="color:var(--g300);">of $1,955,000</span></div>
+                <div style="height:4px;background:var(--g100);border-radius:4px;overflow:hidden;">
+                  <div style="width:82%;height:100%;background:linear-gradient(90deg,var(--teal),#34d399);border-radius:4px;"></div>
+                </div>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:12px;padding-top:10px;border-top:1px solid var(--g100);">
+              <div style="text-align:center;"><div style="font-size:9px;color:var(--g400);margin-bottom:2px;">Calls/Mo</div><div style="font-size:13px;font-weight:700;color:var(--dark);font-family:var(--mono);">7</div></div>
+              <div style="text-align:center;"><div style="font-size:9px;color:var(--g400);margin-bottom:2px;">Win Rate</div><div style="font-size:13px;font-weight:700;color:var(--teal);font-family:var(--mono);">68%</div></div>
+              <div style="text-align:center;"><div style="font-size:9px;color:var(--g400);margin-bottom:2px;">Proposals</div><div style="font-size:13px;font-weight:700;color:var(--dark);font-family:var(--mono);">14</div></div>
+              <div style="text-align:center;"><div style="font-size:9px;color:var(--g400);margin-bottom:2px;">Avg Opp</div><div style="font-size:13px;font-weight:700;color:var(--dark);font-family:var(--mono);">$56K</div></div>
+            </div>
+          </div>
+
+          <!-- Aya Pedrad — On Track 88% -->
+          <div class="goal-card" data-status="on-track" style="background:var(--white);border:1px solid var(--g100);border-radius:14px;padding:14px;border-left:4px solid var(--teal);">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div style="position:relative;flex-shrink:0;">
+                <svg width="52" height="52" viewBox="0 0 52 52" style="transform:rotate(-90deg);">
+                  <circle cx="26" cy="26" r="21" fill="none" stroke="var(--g100)" stroke-width="5"/>
+                  <circle cx="26" cy="26" r="21" fill="none" stroke="var(--teal)" stroke-width="5" stroke-linecap="round" stroke-dasharray="131.9" stroke-dashoffset="15.8"/>
+                </svg>
+                <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+                  <img src="https://randomuser.me/api/portraits/women/44.jpg" style="width:34px;height:34px;border-radius:50%;object-fit:cover;">
+                </div>
+              </div>
+              <div style="flex:1;min-width:0;">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;">
+                  <div style="font-size:14px;font-weight:700;color:var(--dark);">Aya Pedrad</div>
+                  <div style="display:flex;align-items:center;gap:6px;">
+                    <span style="font-size:13px;font-weight:700;color:var(--teal);font-family:var(--mono);">88%</span>
+                    <span style="background:rgba(29,158,117,0.12);color:var(--teal);border-radius:20px;padding:2px 8px;font-size:10px;font-weight:700;">On Track</span>
+                  </div>
+                </div>
+                <div style="font-size:11px;color:var(--g400);margin-bottom:6px;">Senior Advisor · 115% pace ⭐</div>
+                <div style="font-size:11px;color:var(--g500);margin-bottom:4px;">$990K <span style="color:var(--g300);">of $1,750,000</span></div>
+                <div style="height:4px;background:var(--g100);border-radius:4px;overflow:hidden;">
+                  <div style="width:88%;height:100%;background:linear-gradient(90deg,var(--teal),#34d399);border-radius:4px;"></div>
+                </div>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:12px;padding-top:10px;border-top:1px solid var(--g100);">
+              <div style="text-align:center;"><div style="font-size:9px;color:var(--g400);margin-bottom:2px;">Calls/Mo</div><div style="font-size:13px;font-weight:700;color:var(--dark);font-family:var(--mono);">12</div></div>
+              <div style="text-align:center;"><div style="font-size:9px;color:var(--g400);margin-bottom:2px;">Win Rate</div><div style="font-size:13px;font-weight:700;color:var(--teal);font-family:var(--mono);">72%</div></div>
+              <div style="text-align:center;"><div style="font-size:9px;color:var(--g400);margin-bottom:2px;">Proposals</div><div style="font-size:13px;font-weight:700;color:var(--dark);font-family:var(--mono);">18</div></div>
+              <div style="text-align:center;"><div style="font-size:9px;color:var(--g400);margin-bottom:2px;">Avg Opp</div><div style="font-size:13px;font-weight:700;color:var(--dark);font-family:var(--mono);">$61K</div></div>
+            </div>
+          </div>
+
+          <!-- Russ Holt — On Track 74% -->
+          <div class="goal-card" data-status="on-track" style="background:var(--white);border:1px solid var(--g100);border-radius:14px;padding:14px;border-left:4px solid var(--teal);">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div style="position:relative;flex-shrink:0;">
+                <svg width="52" height="52" viewBox="0 0 52 52" style="transform:rotate(-90deg);">
+                  <circle cx="26" cy="26" r="21" fill="none" stroke="var(--g100)" stroke-width="5"/>
+                  <circle cx="26" cy="26" r="21" fill="none" stroke="var(--teal)" stroke-width="5" stroke-linecap="round" stroke-dasharray="131.9" stroke-dashoffset="34.3"/>
+                </svg>
+                <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+                  <img src="https://randomuser.me/api/portraits/men/71.jpg" style="width:34px;height:34px;border-radius:50%;object-fit:cover;">
+                </div>
+              </div>
+              <div style="flex:1;min-width:0;">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;">
+                  <div style="font-size:14px;font-weight:700;color:var(--dark);">Russ Holt</div>
+                  <div style="display:flex;align-items:center;gap:6px;">
+                    <span style="font-size:13px;font-weight:700;color:var(--teal);font-family:var(--mono);">74%</span>
+                    <span style="background:rgba(29,158,117,0.12);color:var(--teal);border-radius:20px;padding:2px 8px;font-size:10px;font-weight:700;">On Track</span>
+                  </div>
+                </div>
+                <div style="font-size:11px;color:var(--g400);margin-bottom:6px;">Financial Advisor · 98% pace</div>
+                <div style="font-size:11px;color:var(--g500);margin-bottom:4px;">$844K <span style="color:var(--g300);">of $1,800,000</span></div>
+                <div style="height:4px;background:var(--g100);border-radius:4px;overflow:hidden;">
+                  <div style="width:74%;height:100%;background:linear-gradient(90deg,var(--teal),#34d399);border-radius:4px;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Jules Richards — At Risk 65% -->
+          <div class="goal-card" data-status="at-risk" style="background:var(--white);border:1px solid var(--g100);border-radius:14px;padding:14px;border-left:4px solid #f59e0b;">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div style="position:relative;flex-shrink:0;">
+                <svg width="52" height="52" viewBox="0 0 52 52" style="transform:rotate(-90deg);">
+                  <circle cx="26" cy="26" r="21" fill="none" stroke="var(--g100)" stroke-width="5"/>
+                  <circle cx="26" cy="26" r="21" fill="none" stroke="#f59e0b" stroke-width="5" stroke-linecap="round" stroke-dasharray="131.9" stroke-dashoffset="46.2"/>
+                </svg>
+                <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+                  <img src="https://randomuser.me/api/portraits/women/15.jpg" style="width:34px;height:34px;border-radius:50%;object-fit:cover;">
+                </div>
+              </div>
+              <div style="flex:1;min-width:0;">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;">
+                  <div style="font-size:14px;font-weight:700;color:var(--dark);">Jules Richards</div>
+                  <div style="display:flex;align-items:center;gap:6px;">
+                    <span style="font-size:13px;font-weight:700;color:#f59e0b;font-family:var(--mono);">65%</span>
+                    <span style="background:rgba(245,158,11,0.12);color:#d97706;border-radius:20px;padding:2px 8px;font-size:10px;font-weight:700;">At Risk</span>
+                  </div>
+                </div>
+                <div style="font-size:11px;color:var(--g400);margin-bottom:6px;">Advisor · 88% pace — pipeline review needed</div>
+                <div style="font-size:11px;color:var(--g500);margin-bottom:4px;">$919K <span style="color:var(--g300);">of $2,050,000</span></div>
+                <div style="height:4px;background:var(--g100);border-radius:4px;overflow:hidden;">
+                  <div style="width:65%;height:100%;background:linear-gradient(90deg,#f59e0b,#fbbf24);border-radius:4px;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Amanda Morrison — At Risk 60% -->
+          <div class="goal-card" data-status="at-risk" style="background:var(--white);border:1px solid var(--g100);border-radius:14px;padding:14px;border-left:4px solid #f59e0b;">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div style="position:relative;flex-shrink:0;">
+                <svg width="52" height="52" viewBox="0 0 52 52" style="transform:rotate(-90deg);">
+                  <circle cx="26" cy="26" r="21" fill="none" stroke="var(--g100)" stroke-width="5"/>
+                  <circle cx="26" cy="26" r="21" fill="none" stroke="#f59e0b" stroke-width="5" stroke-linecap="round" stroke-dasharray="131.9" stroke-dashoffset="52.8"/>
+                </svg>
+                <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#f59e0b;border-radius:50%;width:34px;height:34px;margin:auto;font-size:13px;font-weight:700;color:#fff;">AM</div>
+              </div>
+              <div style="flex:1;min-width:0;">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;">
+                  <div style="font-size:14px;font-weight:700;color:var(--dark);">Amanda Morrison</div>
+                  <div style="display:flex;align-items:center;gap:6px;">
+                    <span style="font-size:13px;font-weight:700;color:#f59e0b;font-family:var(--mono);">60%</span>
+                    <span style="background:rgba(245,158,11,0.12);color:#d97706;border-radius:20px;padding:2px 8px;font-size:10px;font-weight:700;">At Risk</span>
+                  </div>
+                </div>
+                <div style="font-size:11px;color:var(--g400);margin-bottom:6px;">Financial Advisor · 82% pace</div>
+                <div style="font-size:11px;color:var(--g500);margin-bottom:4px;">$839K <span style="color:var(--g300);">of $2,100,000</span></div>
+                <div style="height:4px;background:var(--g100);border-radius:4px;overflow:hidden;">
+                  <div style="width:60%;height:100%;background:linear-gradient(90deg,#f59e0b,#fbbf24);border-radius:4px;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Doug Silverness — Behind 43% -->
+          <div class="goal-card" data-status="behind" style="background:var(--white);border:1px solid var(--g100);border-radius:14px;padding:14px;border-left:4px solid #ef4444;">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div style="position:relative;flex-shrink:0;">
+                <svg width="52" height="52" viewBox="0 0 52 52" style="transform:rotate(-90deg);">
+                  <circle cx="26" cy="26" r="21" fill="none" stroke="var(--g100)" stroke-width="5"/>
+                  <circle cx="26" cy="26" r="21" fill="none" stroke="#ef4444" stroke-width="5" stroke-linecap="round" stroke-dasharray="131.9" stroke-dashoffset="75.2"/>
+                </svg>
+                <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#8b5cf6;border-radius:50%;width:34px;height:34px;margin:auto;font-size:13px;font-weight:700;color:#fff;">DS</div>
+              </div>
+              <div style="flex:1;min-width:0;">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;">
+                  <div style="font-size:14px;font-weight:700;color:var(--dark);">Doug Silverness</div>
+                  <div style="display:flex;align-items:center;gap:6px;">
+                    <span style="font-size:13px;font-weight:700;color:#ef4444;font-family:var(--mono);">43%</span>
+                    <span style="background:rgba(239,68,68,0.1);color:#ef4444;border-radius:20px;padding:2px 8px;font-size:10px;font-weight:700;">Behind ⚠</span>
+                  </div>
+                </div>
+                <div style="font-size:11px;color:var(--g400);margin-bottom:6px;">Advisor · Critically behind pace — action needed</div>
+                <div style="font-size:11px;color:var(--g500);margin-bottom:4px;">$777K <span style="color:var(--g300);">of $2,200,000</span></div>
+                <div style="height:4px;background:var(--g100);border-radius:4px;overflow:hidden;">
+                  <div style="width:43%;height:100%;background:linear-gradient(90deg,#ef4444,#f87171);border-radius:4px;"></div>
+                </div>
+              </div>
+            </div>
+            <!-- Ace alert -->
+            <div style="margin-top:10px;padding:8px 10px;background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.15);border-radius:8px;font-size:11px;color:#dc2626;">
+              <strong>Ace:</strong> Schedule 1:1 this week. Critical gap to close.
+            </div>
+          </div>
+
+        </div><!-- end card list -->
+        <div style="height:80px;"></div>
       </div>
     </div>
 
-    <!-- PIPELINE (placeholder) -->
+    <!-- PIPELINE -->
     <div id="page-pipeline" class="page">
       <div class="section-header">
         <div>
           <div class="section-title">Pipeline</div>
-          <div class="section-sub">Manage your deals by stage</div>
+          <div class="section-sub">Sales Pipeline</div>
         </div>
+        <button onclick="showToast('Add opportunity coming soon')" style="display:flex;align-items:center;gap:5px;padding:7px 12px;background:var(--teal);color:#fff;border:none;border-radius:10px;font-size:12px;font-weight:700;font-family:var(--font);cursor:pointer;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add Opp
+        </button>
       </div>
-      <div style="padding:40px 16px;text-align:center;color:var(--g400);">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--g300)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:12px;"><rect x="3" y="3" width="5" height="18" rx="1"/><rect x="10" y="3" width="5" height="11" rx="1"/><rect x="17" y="3" width="4" height="7" rx="1"/></svg>
-        <div style="font-size:15px;font-weight:600;color:var(--g600);margin-bottom:6px;">Pipeline Page</div>
-        <div style="font-size:13px;color:var(--g400);">Coming next!</div>
+
+      <!-- Stats bar -->
+      <div style="padding:0 16px;">
+        <div style="display:flex;gap:10px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px;">
+          <div style="background:var(--white);border:1px solid var(--g200);border-radius:12px;padding:10px 14px;flex-shrink:0;">
+            <div style="font-size:9px;color:var(--g400);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Total Value</div>
+            <div style="font-size:16px;font-weight:700;color:var(--dark);font-family:var(--mono);">$1.29M</div>
+          </div>
+          <div style="background:var(--white);border:1px solid var(--g200);border-radius:12px;padding:10px 14px;flex-shrink:0;">
+            <div style="font-size:9px;color:var(--g400);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Opps</div>
+            <div style="font-size:16px;font-weight:700;color:var(--dark);font-family:var(--mono);">12</div>
+          </div>
+          <div style="background:var(--white);border:1px solid var(--g200);border-radius:12px;padding:10px 14px;flex-shrink:0;">
+            <div style="font-size:9px;color:var(--g400);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Avg Size</div>
+            <div style="font-size:16px;font-weight:700;color:var(--dark);font-family:var(--mono);">$108K</div>
+          </div>
+          <div style="background:var(--white);border:1px solid var(--g200);border-radius:12px;padding:10px 14px;flex-shrink:0;">
+            <div style="font-size:9px;color:var(--g400);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Win Rate</div>
+            <div style="font-size:16px;font-weight:700;color:var(--teal);font-family:var(--mono);">58%</div>
+          </div>
+        </div>
+
+        <!-- Stage tabs -->
+        <div id="pipe-stage-tabs" style="display:flex;gap:0;border-bottom:2px solid var(--g100);margin-bottom:14px;overflow-x:auto;">
+          <button onclick="switchPipeStage('prospect',this)" class="pipe-stage-tab active-stage" style="padding:8px 12px;font-size:11px;font-weight:700;border:none;background:none;cursor:pointer;white-space:nowrap;color:var(--teal);border-bottom:2px solid var(--teal);margin-bottom:-2px;font-family:var(--font);">Prospect <span style="background:var(--teal);color:#fff;border-radius:8px;padding:1px 6px;font-size:9px;">2</span></button>
+          <button onclick="switchPipeStage('contact',this)" class="pipe-stage-tab" style="padding:8px 12px;font-size:11px;font-weight:700;border:none;background:none;cursor:pointer;white-space:nowrap;color:var(--g400);border-bottom:2px solid transparent;margin-bottom:-2px;font-family:var(--font);">Contact Made <span style="background:var(--g200);color:var(--dark);border-radius:8px;padding:1px 6px;font-size:9px;">3</span></button>
+          <button onclick="switchPipeStage('docs',this)" class="pipe-stage-tab" style="padding:8px 12px;font-size:11px;font-weight:700;border:none;background:none;cursor:pointer;white-space:nowrap;color:var(--g400);border-bottom:2px solid transparent;margin-bottom:-2px;font-family:var(--font);">Docs <span style="background:var(--g200);color:var(--dark);border-radius:8px;padding:1px 6px;font-size:9px;">2</span></button>
+          <button onclick="switchPipeStage('payment',this)" class="pipe-stage-tab" style="padding:8px 12px;font-size:11px;font-weight:700;border:none;background:none;cursor:pointer;white-space:nowrap;color:var(--g400);border-bottom:2px solid transparent;margin-bottom:-2px;font-family:var(--font);">Payment <span style="background:var(--g200);color:var(--dark);border-radius:8px;padding:1px 6px;font-size:9px;">2</span></button>
+          <button onclick="switchPipeStage('enrolled',this)" class="pipe-stage-tab" style="padding:8px 12px;font-size:11px;font-weight:700;border:none;background:none;cursor:pointer;white-space:nowrap;color:var(--g400);border-bottom:2px solid transparent;margin-bottom:-2px;font-family:var(--font);">Enrolled <span style="background:var(--teal);color:#fff;border-radius:8px;padding:1px 6px;font-size:9px;">3</span></button>
+        </div>
+
+        <!-- Deal cards list -->
+        <div id="pipe-deal-list" style="display:flex;flex-direction:column;gap:10px;"></div>
+
+        <div style="height:80px;"></div>
       </div>
     </div>
 
-    <!-- ACCOUNTS (placeholder) -->
+    <!-- ACCOUNTS -->
     <div id="page-accounts" class="page">
       <div class="section-header">
         <div>
           <div class="section-title">Accounts</div>
-          <div class="section-sub">Contacts &amp; companies</div>
+          <div class="section-sub">People &amp; organizations</div>
         </div>
+        <button onclick="showToast('Add contact coming soon')" style="display:flex;align-items:center;gap:5px;padding:7px 12px;background:var(--teal);color:#fff;border:none;border-radius:10px;font-size:12px;font-weight:700;font-family:var(--font);cursor:pointer;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add
+        </button>
       </div>
-      <div style="padding:40px 16px;text-align:center;color:var(--g400);">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--g300)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:12px;"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        <div style="font-size:15px;font-weight:600;color:var(--g600);margin-bottom:6px;">Accounts Page</div>
-        <div style="font-size:13px;color:var(--g400);">Coming next!</div>
+      <div style="padding:0 16px;">
+
+        <!-- Tab toggle -->
+        <div style="display:flex;background:var(--g100);border-radius:10px;padding:3px;margin-bottom:14px;gap:2px;">
+          <button id="accts-tab-people" onclick="switchAcctsTab('people')" style="flex:1;padding:7px 10px;border-radius:8px;border:none;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font);background:var(--white);color:var(--dark);box-shadow:0 1px 4px rgba(0,0,0,0.08);">
+            People
+          </button>
+          <button id="accts-tab-orgs" onclick="switchAcctsTab('orgs')" style="flex:1;padding:7px 10px;border-radius:8px;border:none;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font);background:transparent;color:var(--g400);">
+            Accounts
+          </button>
+        </div>
+
+        <!-- Search -->
+        <div style="position:relative;margin-bottom:14px;">
+          <input type="text" placeholder="Search…" oninput="filterAccounts(this.value)" style="width:100%;border:1.5px solid var(--g200);border-radius:10px;padding:9px 12px 9px 34px;font-size:13px;font-family:var(--font);outline:none;color:var(--dark);background:var(--white);box-sizing:border-box;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--g400)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </div>
+
+        <!-- PEOPLE LIST -->
+        <div id="accts-people-view">
+          <div style="display:flex;flex-direction:column;gap:0;background:var(--white);border:1px solid var(--g200);border-radius:14px;overflow:hidden;">
+
+            <div class="acct-row" onclick="showToast('Marcus Lee · Riverside Financial')" style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid var(--g100);cursor:pointer;">
+              <div style="width:38px;height:38px;border-radius:50%;background:#1d9e75;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0;">ML</div>
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:13px;font-weight:700;color:var(--dark);">Marcus Lee</div>
+                <div style="font-size:11px;color:var(--g400);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Riverside Financial Group</div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
+                <span style="background:rgba(29,158,117,0.12);color:var(--teal);border-radius:20px;padding:2px 8px;font-size:10px;font-weight:700;">Prospect</span>
+                <span style="font-size:10px;color:var(--g400);">BW · 3d ago</span>
+              </div>
+            </div>
+
+            <div class="acct-row" onclick="showToast('Sara Kim · Clearview Dental')" style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid var(--g100);cursor:pointer;">
+              <div style="width:38px;height:38px;border-radius:50%;background:#8b5cf6;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0;">SK</div>
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:13px;font-weight:700;color:var(--dark);">Sara Kim</div>
+                <div style="font-size:11px;color:var(--g400);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Clearview Dental Associates</div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
+                <span style="background:rgba(29,158,117,0.12);color:var(--teal);border-radius:20px;padding:2px 8px;font-size:10px;font-weight:700;">Prospect</span>
+                <span style="font-size:10px;color:var(--g400);">RH · 1d ago</span>
+              </div>
+            </div>
+
+            <div class="acct-row" onclick="showToast('Tara Nguyen · Apex Holdings')" style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid var(--g100);cursor:pointer;">
+              <div style="width:38px;height:38px;border-radius:50%;background:#f59e0b;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0;">TN</div>
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:13px;font-weight:700;color:var(--dark);">Tara Nguyen</div>
+                <div style="font-size:11px;color:var(--g400);">Apex Holdings LLC</div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
+                <span style="background:rgba(245,158,11,0.12);color:#d97706;border-radius:20px;padding:2px 8px;font-size:10px;font-weight:700;">Contact Made</span>
+                <span style="font-size:10px;color:var(--red);">8d ago ⚠</span>
+              </div>
+            </div>
+
+            <div class="acct-row" onclick="showToast('David Park · Summit Credit Union')" style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid var(--g100);cursor:pointer;">
+              <div style="width:38px;height:38px;border-radius:50%;background:#3b82f6;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0;">DP</div>
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:13px;font-weight:700;color:var(--dark);">David Park</div>
+                <div style="font-size:11px;color:var(--g400);">Summit Credit Union</div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
+                <span style="background:rgba(59,130,246,0.12);color:#3b82f6;border-radius:20px;padding:2px 8px;font-size:10px;font-weight:700;">Contact Made</span>
+                <span style="font-size:10px;color:var(--g400);">BW · 5d ago</span>
+              </div>
+            </div>
+
+            <div class="acct-row" onclick="showToast('Linda Walsh · Northgate Realty')" style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid var(--g100);cursor:pointer;">
+              <div style="width:38px;height:38px;border-radius:50%;background:#6366f1;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0;">LW</div>
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:13px;font-weight:700;color:var(--dark);">Linda Walsh</div>
+                <div style="font-size:11px;color:var(--g400);">Northgate Realty Group</div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
+                <span style="background:rgba(99,102,241,0.12);color:#6366f1;border-radius:20px;padding:2px 8px;font-size:10px;font-weight:700;">Contact Made</span>
+                <span style="font-size:10px;color:var(--g400);">DS · 2d ago</span>
+              </div>
+            </div>
+
+            <div class="acct-row" onclick="showToast('Angela Ross · Harborview Medical')" style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid var(--g100);cursor:pointer;">
+              <div style="width:38px;height:38px;border-radius:50%;background:#8b5cf6;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0;">AR</div>
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:13px;font-weight:700;color:var(--dark);">Angela Ross</div>
+                <div style="font-size:11px;color:var(--g400);">Harborview Medical Center</div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
+                <span style="background:rgba(16,185,129,0.1);color:#059669;border-radius:20px;padding:2px 8px;font-size:10px;font-weight:700;">Docs Collected</span>
+                <span style="font-size:10px;color:var(--g400);">RH · 4d ago</span>
+              </div>
+            </div>
+
+            <div class="acct-row" onclick="showToast('Mike Flores · Prestige Auto')" style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid var(--g100);cursor:pointer;">
+              <div style="width:38px;height:38px;border-radius:50%;background:#f59e0b;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0;">MF</div>
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:13px;font-weight:700;color:var(--dark);">Mike Flores</div>
+                <div style="font-size:11px;color:var(--g400);">Prestige Auto Group</div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
+                <span style="background:rgba(16,185,129,0.1);color:#059669;border-radius:20px;padding:2px 8px;font-size:10px;font-weight:700;">Docs Collected</span>
+                <span style="font-size:10px;color:var(--red);">11d ago ⚠</span>
+              </div>
+            </div>
+
+            <div class="acct-row" onclick="showToast('Chris Brown · Lakewood Builders')" style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid var(--g100);cursor:pointer;">
+              <div style="width:38px;height:38px;border-radius:50%;background:#1d9e75;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0;">CB</div>
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:13px;font-weight:700;color:var(--dark);">Chris Brown</div>
+                <div style="font-size:11px;color:var(--g400);">Lakewood Builders Inc.</div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
+                <span style="background:rgba(29,158,117,0.12);color:var(--teal);border-radius:20px;padding:2px 8px;font-size:10px;font-weight:700;">Payment ✓</span>
+                <span style="font-size:10px;color:var(--g400);">DS · 2d ago</span>
+              </div>
+            </div>
+
+            <div class="acct-row" onclick="showToast('Rachel Green · Cascade Logistics')" style="display:flex;align-items:center;gap:12px;padding:12px 14px;cursor:pointer;">
+              <div style="width:38px;height:38px;border-radius:50%;background:#8b5cf6;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0;">RG</div>
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:13px;font-weight:700;color:var(--dark);">Rachel Green</div>
+                <div style="font-size:11px;color:var(--g400);">Cascade Logistics Partners</div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
+                <span style="background:rgba(29,158,117,0.2);color:var(--teal);border-radius:20px;padding:2px 8px;font-size:10px;font-weight:700;">Enrolled</span>
+                <span style="font-size:10px;color:var(--g400);">RH · 3d ago</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ORGS/ACCOUNTS LIST -->
+        <div id="accts-orgs-view" style="display:none;flex-direction:column;gap:10px;">
+          <div style="display:flex;flex-direction:column;gap:0;background:var(--white);border:1px solid var(--g200);border-radius:14px;overflow:hidden;">
+
+            <div onclick="showToast('Riverside Financial Group')" style="display:flex;align-items:center;gap:12px;padding:13px 14px;border-bottom:1px solid var(--g100);cursor:pointer;">
+              <div style="width:38px;height:38px;border-radius:10px;background:rgba(29,158,117,0.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+              </div>
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:13px;font-weight:700;color:var(--dark);">Riverside Financial Group</div>
+                <div style="font-size:11px;color:var(--g400);">Finance · 1 person · 1 opp</div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-size:13px;font-weight:700;color:var(--teal);font-family:var(--mono);">$92K</div>
+                <div style="font-size:10px;color:var(--g400);">BW</div>
+              </div>
+            </div>
+
+            <div onclick="showToast('Apex Holdings LLC')" style="display:flex;align-items:center;gap:12px;padding:13px 14px;border-bottom:1px solid var(--g100);cursor:pointer;">
+              <div style="width:38px;height:38px;border-radius:10px;background:rgba(245,158,11,0.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+              </div>
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:13px;font-weight:700;color:var(--dark);">Apex Holdings LLC</div>
+                <div style="font-size:11px;color:var(--g400);">Holdings · 1 person · 1 opp</div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-size:13px;font-weight:700;color:var(--teal);font-family:var(--mono);">$145K</div>
+                <div style="font-size:10px;color:var(--red);">8d stale</div>
+              </div>
+            </div>
+
+            <div onclick="showToast('Harborview Medical Center')" style="display:flex;align-items:center;gap:12px;padding:13px 14px;border-bottom:1px solid var(--g100);cursor:pointer;">
+              <div style="width:38px;height:38px;border-radius:10px;background:rgba(99,102,241,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+              </div>
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:13px;font-weight:700;color:var(--dark);">Harborview Medical Center</div>
+                <div style="font-size:11px;color:var(--g400);">Healthcare · 1 person · 1 opp</div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-size:13px;font-weight:700;color:var(--teal);font-family:var(--mono);">$158K</div>
+                <div style="font-size:10px;color:var(--g400);">RH</div>
+              </div>
+            </div>
+
+            <div onclick="showToast('Lakewood Builders Inc.')" style="display:flex;align-items:center;gap:12px;padding:13px 14px;border-bottom:1px solid var(--g100);cursor:pointer;">
+              <div style="width:38px;height:38px;border-radius:10px;background:rgba(29,158,117,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+              </div>
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:13px;font-weight:700;color:var(--dark);">Lakewood Builders Inc.</div>
+                <div style="font-size:11px;color:var(--g400);">Construction · 1 person · 1 opp</div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-size:13px;font-weight:700;color:var(--teal);font-family:var(--mono);">$174K</div>
+                <div style="font-size:10px;color:var(--g400);">DS</div>
+              </div>
+            </div>
+
+            <div onclick="showToast('Cascade Logistics Partners')" style="display:flex;align-items:center;gap:12px;padding:13px 14px;cursor:pointer;">
+              <div style="width:38px;height:38px;border-radius:10px;background:rgba(139,92,246,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+              </div>
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:13px;font-weight:700;color:var(--dark);">Cascade Logistics Partners</div>
+                <div style="font-size:11px;color:var(--g400);">Logistics · 1 person · 1 opp</div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-size:13px;font-weight:700;color:var(--teal);font-family:var(--mono);">$138K</div>
+                <div style="font-size:10px;color:var(--g400);">RH</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div style="height:80px;"></div>
       </div>
     </div>
 
@@ -1329,6 +1808,9 @@ function showPage(page) {
   // scroll to top
   document.getElementById('page-area').scrollTo(0, 0);
 
+  // init pipeline deal list on first visit
+  if (page === 'pipeline') setTimeout(initPipeline, 0);
+
   // show/hide ace fab
   document.getElementById('ace-fab').style.display = page === 'ace' ? 'none' : 'flex';
 
@@ -1362,6 +1844,108 @@ function showToast(msg) {
   t.classList.add('show');
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// ── GOALS FILTER ──
+function filterGoalCards(status, btn) {
+  document.querySelectorAll('.goals-chip').forEach(c => {
+    c.style.background = 'var(--white)';
+    c.style.color = 'var(--g600)';
+    c.style.borderColor = 'var(--g200)';
+  });
+  btn.style.background = 'var(--teal)';
+  btn.style.color = '#fff';
+  btn.style.borderColor = 'var(--teal)';
+  document.querySelectorAll('.goal-card').forEach(card => {
+    card.style.display = (status === 'all' || card.dataset.status === status) ? '' : 'none';
+  });
+}
+
+// ── PIPELINE STAGE TABS ──
+const pipeDeals = {
+  prospect: [
+    { title:'Riverside Financial — Group Benefits', org:'Riverside Financial Group', contact:'ML', contactName:'Marcus Lee', rep:'BW', repColor:'#1d9e75', value:'$92,000', aging:'3d', dot:'upcoming' },
+    { title:'Clearview Dental — Employee Plan', org:'Clearview Dental Associates', contact:'SK', contactName:'Sara Kim', rep:'RH', repColor:'#8b5cf6', value:'$70,000', aging:'1d', dot:'none' },
+  ],
+  contact: [
+    { title:'Apex Holdings — Life & Disability', org:'Apex Holdings LLC', contact:'TN', contactName:'Tara Nguyen', rep:'JR', repColor:'#f59e0b', value:'$145,000', aging:'8d', dot:'overdue', agingRed:true },
+    { title:'Summit Credit Union — Annuity', org:'Summit Credit Union', contact:'DP', contactName:'David Park', rep:'BW', repColor:'#1d9e75', value:'$128,500', aging:'5d', dot:'upcoming' },
+    { title:'Northgate Realty — Key Person', org:'Northgate Realty Group', contact:'LW', contactName:'Linda Walsh', rep:'DS', repColor:'#3b82f6', value:'$114,000', aging:'2d', dot:'none' },
+  ],
+  docs: [
+    { title:'Harborview Medical — Group Health', org:'Harborview Medical Center', contact:'AR', contactName:'Angela Ross', rep:'RH', repColor:'#8b5cf6', value:'$158,000', aging:'4d', dot:'upcoming' },
+    { title:'Prestige Auto Group — Fleet Coverage', org:'Prestige Auto Group', contact:'MF', contactName:'Mike Flores', rep:'JR', repColor:'#f59e0b', value:'$95,000', aging:'11d', dot:'overdue', agingRed:true },
+  ],
+  payment: [
+    { title:'Lakewood Builders — Workers Comp', org:'Lakewood Builders Inc.', contact:'CB', contactName:'Chris Brown', rep:'DS', repColor:'#3b82f6', value:'$174,000', aging:'2d', dot:'upcoming', won:true },
+    { title:'Meridian Schools — Admin Benefits', org:'Meridian School District', contact:'JM', contactName:'Janet Moore', rep:'BW', repColor:'#1d9e75', value:'$100,000', aging:'6d', dot:'upcoming' },
+  ],
+  enrolled: [
+    { title:'Cascade Logistics — Executive Life', org:'Cascade Logistics Partners', contact:'RG', contactName:'Rachel Green', rep:'RH', repColor:'#8b5cf6', value:'$138,000', aging:'3d', dot:'upcoming' },
+    { title:'Pioneer Tech — HSA & FSA Setup', org:'Pioneer Technology Inc.', contact:'BT', contactName:'Ben Torres', rep:'JR', repColor:'#f59e0b', value:'$80,000', aging:'9d', dot:'none' },
+    { title:'Meridian Schools — Admin Benefits', org:'Meridian School District', contact:'JM', contactName:'Janet Moore', rep:'BW', repColor:'#1d9e75', value:'$100,000', aging:'6d', dot:'upcoming' },
+  ],
+};
+
+function switchPipeStage(stage, btn) {
+  document.querySelectorAll('.pipe-stage-tab').forEach(t => {
+    t.style.color = 'var(--g400)';
+    t.style.borderBottomColor = 'transparent';
+  });
+  btn.style.color = 'var(--teal)';
+  btn.style.borderBottomColor = 'var(--teal)';
+
+  const deals = pipeDeals[stage] || [];
+  const dotColors = { upcoming:'#1d9e75', overdue:'#ef4444', none:'var(--g200)' };
+  document.getElementById('pipe-deal-list').innerHTML = deals.map(d => `
+    <div onclick="showToast('${d.title}')" style="background:var(--white);border:1px solid var(--g200);border-radius:14px;padding:14px;cursor:pointer;${d.won?'border-left:3px solid var(--teal);':''}">
+      <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;">
+        <div style="width:8px;height:8px;border-radius:50%;background:${dotColors[d.dot]||'var(--g200)'};flex-shrink:0;margin-top:5px;"></div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:13px;font-weight:700;color:var(--dark);margin-bottom:3px;">${d.title}</div>
+          <div style="font-size:11px;color:var(--g400);">${d.org}</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <div style="display:flex;align-items:center;gap:6px;">
+          <div style="width:24px;height:24px;border-radius:50%;background:var(--g200);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--g600);">${d.contact}</div>
+          <span style="font-size:11px;color:var(--g500);">${d.contactName}</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div style="width:26px;height:26px;border-radius:50%;background:${d.repColor};display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;">${d.rep}</div>
+          <span style="font-size:13px;font-weight:700;color:var(--teal);font-family:var(--mono);">${d.value}</span>
+          <span style="font-size:11px;font-weight:600;color:${d.agingRed?'var(--red)':'var(--g400)'};">${d.aging}</span>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+// Initialize pipeline on first nav to that page — see showPage override below
+function initPipeline() {
+  const firstBtn = document.querySelector('.pipe-stage-tab.active-stage');
+  if (firstBtn) switchPipeStage('prospect', firstBtn);
+  else switchPipeStage('prospect', { style: {} });
+}
+
+// ── ACCOUNTS TAB ──
+function switchAcctsTab(tab) {
+  const isPeople = tab === 'people';
+  document.getElementById('accts-people-view').style.display = isPeople ? '' : 'none';
+  document.getElementById('accts-orgs-view').style.display = isPeople ? 'none' : 'flex';
+  document.getElementById('accts-tab-people').style.background = isPeople ? 'var(--white)' : 'transparent';
+  document.getElementById('accts-tab-people').style.color = isPeople ? 'var(--dark)' : 'var(--g400)';
+  document.getElementById('accts-tab-people').style.boxShadow = isPeople ? '0 1px 4px rgba(0,0,0,0.08)' : 'none';
+  document.getElementById('accts-tab-orgs').style.background = isPeople ? 'transparent' : 'var(--white)';
+  document.getElementById('accts-tab-orgs').style.color = isPeople ? 'var(--g400)' : 'var(--dark)';
+  document.getElementById('accts-tab-orgs').style.boxShadow = isPeople ? 'none' : '0 1px 4px rgba(0,0,0,0.08)';
+}
+
+// ── ACCOUNTS SEARCH ──
+function filterAccounts(val) {
+  const q = val.toLowerCase();
+  document.querySelectorAll('.acct-row').forEach(row => {
+    row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
 }
 
 // ── ASK ACE ──
